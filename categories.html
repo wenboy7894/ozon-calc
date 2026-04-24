@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Ozon 全类目佣金表 2026</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --blue:#005bff;--blue2:#0041cc;--blue-l:#e8f0ff;
+  --orange:#ff6900;--orange-l:#fff3eb;
+  --green:#00b96b;--green-l:#e6faf2;
+  --red:#ff3b30;--red-l:#fff0ef;
+  --bg:#f0f4ff;--card:#fff;
+  --b1:#dde3f0;--b2:#eef1f8;
+  --t1:#111827;--t2:#374151;--t3:#6b7280;--t4:#9ca3af;
+  --r:8px;
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--t1);font-size:13px;line-height:1.5;min-height:100vh}
+.hd{background:linear-gradient(90deg,#0a1f5c 0%,#005bff 100%);color:#fff;height:42px;display:flex;align-items:center;padding:0 16px;gap:10px}
+.hd-logo{background:rgba(255,255,255,.15);border-radius:8px;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:11px;letter-spacing:-1px;border:1px solid rgba(255,255,255,.25)}
+.hd h1{font-size:13px;font-weight:700}
+.hd-badge{margin-left:auto;background:rgba(255,105,0,.8);border-radius:10px;padding:2px 10px;font-size:11px;font-weight:600}
+.hd-back{color:#fff;text-decoration:none;font-size:12px;opacity:.8;margin-left:12px}
+.hd-back:hover{opacity:1;text-decoration:underline}
+.search-bar{padding:10px 16px;background:var(--card);border-bottom:1px solid var(--b1);position:sticky;top:0;z-index:10}
+.search-bar input{width:100%;height:34px;padding:0 12px;font-size:13px;border:1.5px solid var(--b1);border-radius:6px;outline:none;background:var(--bg)}
+.search-bar input:focus{border-color:var(--blue);background:#fff}
+.search-bar .hint{font-size:11px;color:var(--t4);margin-top:6px}
+.filter-row{display:flex;align-items:center;gap:6px;margin-top:8px;flex-wrap:wrap}
+.filter-label{font-size:11px;color:var(--t3);font-weight:600}
+.filter-btn{padding:3px 10px;border:1.5px solid var(--b1);border-radius:14px;background:var(--bg);cursor:pointer;font-size:11px;font-weight:600;color:var(--t3);transition:all .15s}
+.filter-btn:hover{border-color:var(--blue);color:var(--blue);background:var(--blue-l)}
+.filter-btn.active{border-color:var(--blue);background:var(--blue-l);color:var(--blue)}
+.filter-btn.low.active{background:var(--green-l);color:var(--green);border-color:var(--green)}
+.filter-btn.mid.active{background:var(--orange-l);color:var(--orange);border-color:var(--orange)}
+.filter-btn.high.active{background:var(--red-l);color:var(--red);border-color:var(--red)}
+.comm-low{color:var(--green)!important}
+.comm-mid{color:var(--orange)!important}
+.comm-high{color:var(--red)!important}
+.cat-block-hd .range-badge{font-size:10px;padding:1px 8px;border-radius:10px;font-weight:600;margin-right:4px}
+.range-low{background:var(--green-l);color:var(--green)}
+.range-mid{background:var(--orange-l);color:var(--orange)}
+.range-high{background:var(--red-l);color:var(--red)}
+.stats{padding:8px 16px;font-size:11px;color:var(--t3);background:var(--card);border-bottom:1px solid var(--b1)}
+.container{max-width:960px;margin:0 auto;padding:12px 16px}
+.cat-block{background:var(--card);border:1px solid var(--b1);border-radius:var(--r);margin-bottom:10px;overflow:hidden}
+.cat-block-hd{padding:8px 12px;font-size:13px;font-weight:700;color:var(--t1);background:var(--bg);border-bottom:1px solid var(--b2);cursor:pointer;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.cat-block-hd .arrow{margin-left:auto;font-size:10px;transition:transform .2s}
+.cat-block-hd.open .arrow{transform:rotate(90deg)}
+.cat-block-hd .cn{font-size:12px;color:var(--blue);font-weight:400;margin-left:4px}
+.cat-block-hd .comm-badge{font-size:10px;background:var(--orange-l);color:var(--orange);padding:1px 8px;border-radius:10px;font-weight:600;margin-left:auto;margin-right:24px}
+.cat-body{display:none}
+.cat-body.open{display:block}
+.cat-item{display:flex;align-items:center;padding:6px 12px 6px 28px;border-bottom:1px solid var(--b2);font-size:12px;gap:8px;cursor:pointer;transition:background .12s}
+.cat-item:last-child{border-bottom:none}
+.cat-item:hover{background:var(--blue-l)}
+.cat-item .ru{color:var(--t2);flex:1;min-width:0}
+.cat-item .cn{color:var(--t3);flex:0 0 auto;font-size:11px}
+.cat-item .fbo{color:var(--blue);font-weight:600;flex:0 0 60px;text-align:right}
+.cat-item .fbs{color:var(--orange);font-weight:600;flex:0 0 60px;text-align:right}
+.cat-item .rfbs{color:var(--green);font-weight:600;flex:0 0 60px;text-align:right}
+.cat-header{display:flex;align-items:center;padding:4px 12px 4px 28px;font-size:10px;color:var(--t4);font-weight:600;text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid var(--b1);background:var(--b2)}
+.cat-header span{flex:0 0 60px;text-align:right}
+.cat-header span:first-child{flex:1;text-align:left}
+.highlight{background:yellow;font-weight:700}
+.no-result{text-align:center;padding:40px;color:var(--t4);font-size:14px}
+@media(max-width:600px){.cat-item{flex-wrap:wrap;gap:4px}.cat-item .fbo,.cat-item .fbs,.cat-item .rfbs{flex:0 0 auto;font-size:11px}}
+</style>
+</head>
+<body>
+<div class="hd">
+  <div class="hd-logo">OZ</div>
+  <h1>Ozon 全类目佣金表</h1>
+  <a class="hd-back" href="index.html">← 返回利润计算器</a>
+  <div class="hd-badge">2026</div>
+</div>
+<div class="search-bar">
+  <input type="text" id="searchInput" placeholder="搜索类目（支持中文/俄语）..." oninput="filterCategories()">
+  <div class="filter-row">
+    <span class="filter-label">佣金筛选：</span>
+    <button class="filter-btn active" onclick="setFilter('all',this)">全部</button>
+    <button class="filter-btn low" onclick="setFilter('low',this)">低佣 ≤10%</button>
+    <button class="filter-btn mid" onclick="setFilter('mid',this)">中佣 10~20%</button>
+    <button class="filter-btn high" onclick="setFilter('high',this)">高佣 &gt;20%</button>
+  </div>
+  <div class="hint">数据来源：Ozon官方佣金表（docs.ozon.ru） · 佣金率随政策调整，以Ozon卖家后台实际为准 · 点击子类目可跳转利润计算器</div>
+</div>
+<div class="stats" id="statsBar">加载中...</div>
+<div class="container" id="catContainer"></div>
+
+<script>
+// Ozon 类目佣金数据（来源：docs.ozon.ru 官方佣金表 2026）
+// 结构：{ block: 俄语大类, blockCn: 中文大类, items: [{ ru, cn, fbo, fbs, rfbs }] }
+const CATEGORIES = [
+  {
+    block: 'Электроника', blockCn: '电子产品',
+    items: [
+      { ru: 'Смартфоны', cn: '智能手机', fbo: 5, fbs: 6, rfbs: 8 },
+      { ru: 'Ноутбуки и компьютеры', cn: '笔记本电脑和台式机', fbo: 5, fbs: 6, rfbs: 8 },
+      { ru: 'Планшеты', cn: '平板电脑', fbo: 5, fbs: 6, rfbs: 8 },
+      { ru: 'Наушники и колонки', cn: '耳机和音箱', fbo: 9, fbs: 10, rfbs: 12 },
+      { ru: 'Аксессуары для электроники', cn: '电子配件', fbo: 9, fbs: 10, rfbs: 12 },
+      { ru: 'Фото- и видеокамеры', cn: '摄影摄像器材', fbo: 7, fbs: 8, rfbs: 10 },
+      { ru: 'Телевизоры и проекторы', cn: '电视和投影仪', fbo: 5, fbs: 6, rfbs: 8 },
+      { ru: 'Игровые приставки', cn: '游戏主机', fbo: 5, fbs: 6, rfbs: 8 },
+      { ru: 'Умные часы и браслеты', cn: '智能手表和手环', fbo: 9, fbs: 10, rfbs: 12 },
+      { ru: 'Комплектующие для ПК', cn: '电脑配件', fbo: 7, fbs: 8, rfbs: 10 },
+    ]
+  },
+  {
+    block: 'Бытовая техника', blockCn: '家用电器',
+    items: [
+      { ru: 'Крупная бытовая техника', cn: '大家电', fbo: 5, fbs: 6, rfbs: 8 },
+      { ru: 'Мелкая бытовая техника', cn: '小家电', fbo: 9, fbs: 10, rfbs: 12 },
+      { ru: 'Техника для кухни', cn: '厨房电器', fbo: 9, fbs: 10, rfbs: 12 },
+      { ru: 'Климатическая техника', cn: '空调/暖通设备', fbo: 7, fbs: 8, rfbs: 10 },
+      { ru: 'Техника для дома', cn: '家用清洁电器', fbo: 9, fbs: 10, rfbs: 12 },
+      { ru: 'Утюги и отпариватели', cn: '熨斗和挂烫机', fbo: 9, fbs: 10, rfbs: 12 },
+    ]
+  },
+  {
+    block: 'Одежда, обувь и аксессуары', blockCn: '服装、鞋靴和配饰',
+    items: [
+      { ru: 'Женская одежда', cn: '女装', fbo: 21, fbs: 23, rfbs: 26 },
+      { ru: 'Мужская одежда', cn: '男装', fbo: 21, fbs: 23, rfbs: 26 },
+      { ru: 'Одежда (1500–5000 ₽)', cn: '服装(1500~5000₽)', fbo: 45, fbs: 47, rfbs: 49 },
+      { ru: 'Обувь женская', cn: '女鞋', fbo: 21, fbs: 23, rfbs: 26 },
+      { ru: 'Обувь мужская', cn: '男鞋', fbo: 21, fbs: 23, rfbs: 26 },
+      { ru: 'Детская одежда', cn: '童装', fbo: 47, fbs: 49, rfbs: 51 },
+      { ru: 'Детская обувь', cn: '童鞋', fbo: 21, fbs: 23, rfbs: 26 },
+      { ru: 'Сумки и рюкзаки', cn: '箱包和背包', fbo: 15, fbs: 17, rfbs: 19 },
+      { ru: 'Аксессуары (ремни, шарфы)', cn: '配饰(腰带、围巾)', fbo: 15, fbs: 17, rfbs: 19 },
+      { ru: 'Ювелирные изделия', cn: '珠宝首饰', fbo: 15, fbs: 17, rfbs: 19 },
+      { ru: 'Бижутерия', cn: '时尚饰品', fbo: 15, fbs: 17, rfbs: 19 },
+      { ru: 'Нижнее бельё', cn: '内衣', fbo: 21, fbs: 23, rfbs: 26 },
+    ]
+  },
+  {
+    block: 'Красота и здоровье', blockCn: '美妆与健康',
+    items: [
+      { ru: 'Уход за лицом', cn: '面部护理', fbo: 15, fbs: 17, rfbs: 19 },
+      { ru: 'Уход за телом', cn: '身体护理', fbo: 15, fbs: 17, rfbs: 19 },
+      { ru: 'Уход за волосами', cn: '头发护理', fbo: 15, fbs: 17, rfbs: 19 },
+      { ru: 'Декоративная косметика', cn: '彩妆', fbo: 15, fbs: 17, rfbs: 19 },
+      { ru: 'Парфюмерия', cn: '香水', fbo: 15, fbs: 17, rfbs: 19 },
+      { ru: 'Косметическая техника', cn: '美容仪器', fbo: 21, fbs: 23, rfbs: 25 },
+      { ru: 'Средства гигиены', cn: '个人卫生用品', fbo: 55, fbs: 57, rfbs: 59 },
+      { ru: 'Витамины и БАДы', cn: '维生素和保健品', fbo: 15, fbs: 17, rfbs: 19 },
+      { ru: 'Медицинские приборы', cn: '医疗器械', fbo: 10, fbs: 12, rfbs: 14 },
+      { ru: 'Оптика (очки, линзы)', cn: '眼镜和隐形眼镜', fbo: 12, fbs: 14, rfbs: 16 },
+    ]
+  },
+  {
+    block: 'Дом и сад', blockCn: '家居与园艺',
+    items: [
+      { ru: 'Мебель', cn: '家具', fbo: 12, fbs: 14, rfbs: 16 },
+      { ru: 'Текстиль для дома', cn: '家纺', fbo: 12, fbs: 14, rfbs: 16 },
+      { ru: 'Посуда', cn: '餐具', fbo: 12, fbs: 14, rfbs: 16 },
+      { ru: 'Товары для кухни', cn: '厨房用品', fbo: 12, fbs: 14, rfbs: 16 },
+      { ru: 'Хозяйственные товары', cn: '日用百货', fbo: 12, fbs: 14, rfbs: 16 },
+      { ru: 'Освещение', cn: '灯具照明', fbo: 12, fbs: 14, rfbs: 16 },
+      { ru: 'Декор для дома', cn: '家居装饰', fbo: 12, fbs: 14, rfbs: 16 },
+      { ru: 'Садовая техника', cn: '园艺工具', fbo: 12, fbs: 14, rfbs: 16 },
+      { ru: 'Товары для ванной', cn: '浴室用品', fbo: 12, fbs: 14, rfbs: 16 },
+      { ru: 'Хранение и организация', cn: '收纳整理', fbo: 12, fbs: 14, rfbs: 16 },
+    ]
+  },
+  {
+    block: 'Детские товары', blockCn: '母婴用品',
+    items: [
+      { ru: 'Игрушки', cn: '玩具', fbo: 12, fbs: 14, rfbs: 16 },
+      { ru: 'Детские игрушки и одежда', cn: '儿童玩具/服装', fbo: 47, fbs: 49, rfbs: 51 },
+      { ru: 'Коляски и автокресла', cn: '婴儿车和安全座椅', fbo: 10, fbs: 12, rfbs: 14 },
+      { ru: 'Подгузники и гигиена', cn: '纸尿裤和卫生用品', fbo: 10, fbs: 12, rfbs: 14 },
+      { ru: 'Детское питание', cn: '婴幼儿食品', fbo: 8, fbs: 10, rfbs: 12 },
+      { ru: 'Товары для кормления', cn: '喂养用品', fbo: 10, fbs: 12, rfbs: 14 },
+      { ru: 'Школьные принадлежности', cn: '学习用品', fbo: 12, fbs: 14, rfbs: 16 },
+    ]
+  },
+  {
+    block: 'Спорт и отдых', blockCn: '运动与休闲',
+    items: [
+      { ru: 'Спортивная одежда', cn: '运动服装', fbo: 12, fbs: 14, rfbs: 16 },
+      { ru: 'Спортивная обувь', cn: '运动鞋', fbo: 12, fbs: 14, rfbs: 16 },
+      { ru: 'Тренажёры и фитнес', cn: '健身器材', fbo: 12, fbs: 14, rfbs: 16 },
+      { ru: 'Велосипеды и самокаты', cn: '自行车和滑板车', fbo: 9, fbs: 10, rfbs: 12 },
+      { ru: 'Туризм и кемпинг', cn: '户外露营', fbo: 12, fbs: 14, rfbs: 16 },
+      { ru: 'Рыбалка и охота', cn: '钓鱼和狩猎', fbo: 12, fbs: 14, rfbs: 16 },
+      { ru: 'Бассейны и аксессуары', cn: '泳池及配件', fbo: 12, fbs: 14, rfbs: 16 },
+    ]
+  },
+  {
+    block: 'Продукты питания', blockCn: '食品饮料',
+    items: [
+      { ru: 'Чай, кофе, какао', cn: '茶/咖啡/可可', fbo: 5, fbs: 7, rfbs: 9 },
+      { ru: 'Кондитерские изделия', cn: '糖果糕点', fbo: 5, fbs: 7, rfbs: 9 },
+      { ru: 'Снеки и орехи', cn: '零食和坚果', fbo: 5, fbs: 7, rfbs: 9 },
+      { ru: 'Крупы и макароны', cn: '谷物和面食', fbo: 5, fbs: 7, rfbs: 9 },
+      { ru: 'Масла и соусы', cn: '食用油和调味品', fbo: 5, fbs: 7, rfbs: 9 },
+      { ru: 'Напитки', cn: '饮料', fbo: 5, fbs: 7, rfbs: 9 },
+      { ru: 'Здоровое питание', cn: '健康食品', fbo: 5, fbs: 7, rfbs: 9 },
+    ]
+  },
+  {
+    block: 'Зоотовары', blockCn: '宠物用品',
+    items: [
+      { ru: 'Корм для кошек', cn: '猫粮', fbo: 10, fbs: 12, rfbs: 14 },
+      { ru: 'Корм для собак', cn: '狗粮', fbo: 10, fbs: 12, rfbs: 14 },
+      { ru: 'Аксессуары для животных', cn: '宠物配件', fbo: 10, fbs: 12, rfbs: 14 },
+      { ru: 'Ветеринарные препараты', cn: '宠物药品', fbo: 10, fbs: 12, rfbs: 14 },
+      { ru: 'Наполнители и туалеты', cn: '猫砂和厕所', fbo: 10, fbs: 12, rfbs: 14 },
+    ]
+  },
+  {
+    block: 'Автотовары', blockCn: '汽车用品',
+    items: [
+      { ru: 'Автоаксессуары', cn: '汽车配件', fbo: 9, fbs: 10, rfbs: 12 },
+      { ru: 'Автоэлектроника', cn: '车载电子', fbo: 9, fbs: 10, rfbs: 12 },
+      { ru: 'Шины и диски', cn: '轮胎和轮毂', fbo: 7, fbs: 8, rfbs: 10 },
+      { ru: 'Масла и автохимия', cn: '机油和汽车化学品', fbo: 9, fbs: 10, rfbs: 12 },
+      { ru: 'Инструменты для авто', cn: '汽车工具', fbo: 9, fbs: 10, rfbs: 12 },
+    ]
+  },
+  {
+    block: 'Книги', blockCn: '图书',
+    items: [
+      { ru: 'Художественная литература', cn: '文学小说', fbo: 42, fbs: 44, rfbs: 46 },
+      { ru: 'Учебная литература', cn: '教材教辅', fbo: 42, fbs: 44, rfbs: 46 },
+      { ru: 'Детские книги', cn: '儿童读物', fbo: 42, fbs: 44, rfbs: 46 },
+      { ru: 'Нон-фикшн', cn: '非虚构类', fbo: 42, fbs: 44, rfbs: 46 },
+      { ru: 'Комиксы и манга', cn: '漫画', fbo: 42, fbs: 44, rfbs: 46 },
+    ]
+  },
+  {
+    block: 'Канцелярские товары', blockCn: '文具办公',
+    items: [
+      { ru: 'Ручки и карандаши', cn: '笔类', fbo: 42, fbs: 44, rfbs: 46 },
+      { ru: 'Бумага и тетради', cn: '纸张和笔记本', fbo: 42, fbs: 44, rfbs: 46 },
+      { ru: 'Офисные принадлежности', cn: '办公用品', fbo: 12, fbs: 14, rfbs: 16 },
+      { ru: 'Товары для творчества', cn: '手工艺品材料', fbo: 12, fbs: 14, rfbs: 16 },
+    ]
+  },
+  {
+    block: 'Строительство и ремонт', blockCn: '建材装修',
+    items: [
+      { ru: 'Инструменты', cn: '工具', fbo: 9, fbs: 10, rfbs: 12 },
+      { ru: 'Электроинструменты', cn: '电动工具', fbo: 9, fbs: 10, rfbs: 12 },
+      { ru: 'Сантехника', cn: '卫浴洁具', fbo: 12, fbs: 14, rfbs: 16 },
+      { ru: 'Краски и лаки', cn: '油漆涂料', fbo: 12, fbs: 14, rfbs: 16 },
+      { ru: 'Электрика', cn: '电气材料', fbo: 9, fbs: 10, rfbs: 12 },
+      { ru: 'Напольные покрытия', cn: '地板材料', fbo: 12, fbs: 14, rfbs: 16 },
+    ]
+  },
+  {
+    block: 'Ценовые категории (все товары)', blockCn: '价格区间类（所有商品）',
+    items: [
+      { ru: 'Товары до 100 ₽', cn: '100₽以下商品', fbo: 14, fbs: 14, rfbs: 17 },
+      { ru: 'Товары 101–300 ₽', cn: '101~300₽商品', fbo: 20, fbs: 20, rfbs: 23 },
+    ]
+  },
+]
+
+let currentFilter = 'all'
+
+const commClass = v => v <= 10 ? 'comm-low' : v <= 20 ? 'comm-mid' : 'comm-high'
+const rangeClass = v => v <= 10 ? 'range-low' : v <= 20 ? 'range-mid' : 'range-high'
+
+const matchFilter = (item, filter) => {
+  if (filter === 'all') return true
+  if (filter === 'low') return item.fbo <= 10
+  if (filter === 'mid') return item.fbo > 10 && item.fbo <= 20
+  if (filter === 'high') return item.fbo > 20
+  return true
+}
+
+const getBlockRange = items => {
+  let min = Infinity, max = -Infinity
+  items.forEach(it => { if (it.fbo < min) min = it.fbo; if (it.fbo > max) max = it.fbo })
+  return { min, max }
+}
+
+const renderCategories = (data, keyword, filter) => {
+  const container = document.getElementById('catContainer')
+  let html = ''
+  let totalItems = 0
+  let matchedItems = 0
+
+  data.forEach((block) => {
+    let itemsHtml = ''
+    let blockMatched = 0
+
+    block.items.forEach(item => {
+      totalItems++
+      const searchStr = (item.ru + ' ' + item.cn + ' ' + block.block + ' ' + block.blockCn).toLowerCase()
+      if (keyword && !searchStr.includes(keyword.toLowerCase())) return
+      if (!matchFilter(item, filter)) return
+      blockMatched++
+      matchedItems++
+
+      const ruText = keyword ? highlightText(item.ru, keyword) : item.ru
+      const cnText = keyword ? highlightText(item.cn, keyword) : item.cn
+
+      itemsHtml += '<div class="cat-item" onclick="goCalc(' + item.fbo + ')" title="点击使用 FBO ' + item.fbo + '% 佣金率跳转利润计算器">'
+        + '<span class="ru">' + ruText + '</span>'
+        + '<span class="cn">' + cnText + '</span>'
+        + '<span class="fbo ' + commClass(item.fbo) + '">' + item.fbo + '%</span>'
+        + '<span class="fbs ' + commClass(item.fbs) + '">' + item.fbs + '%</span>'
+        + '<span class="rfbs ' + commClass(item.rfbs) + '">' + item.rfbs + '%</span>'
+        + '</div>'
+    })
+
+    if ((keyword || filter !== 'all') && blockMatched === 0) return
+
+    const blockRu = keyword ? highlightText(block.block, keyword) : block.block
+    const blockCn = keyword ? highlightText(block.blockCn, keyword) : block.blockCn
+    const isOpen = !!(keyword || filter !== 'all')
+    const range = getBlockRange(block.items)
+    const rangeStr = range.min === range.max ? range.min + '%' : range.min + '~' + range.max + '%'
+
+    html += '<div class="cat-block">'
+      + '<div class="cat-block-hd' + (isOpen ? ' open' : '') + '" onclick="toggleBlock(this)">'
+      + '<span>' + blockRu + '</span>'
+      + '<span class="cn">' + blockCn + '</span>'
+      + '<span class="range-badge ' + rangeClass(range.min) + '">FBO ' + rangeStr + '</span>'
+      + '<span class="comm-badge">' + blockMatched + ' 项</span>'
+      + '<span class="arrow">▶</span>'
+      + '</div>'
+      + '<div class="cat-body' + (isOpen ? ' open' : '') + '">'
+      + '<div class="cat-header"><span>类目名称</span><span>FBO</span><span>FBS</span><span>rFBS</span></div>'
+      + itemsHtml
+      + '</div>'
+      + '</div>'
+  })
+
+  if (matchedItems === 0) {
+    html = '<div class="no-result">未找到匹配的类目</div>'
+  }
+
+  container.innerHTML = html
+  document.getElementById('statsBar').textContent =
+    '共 ' + data.length + ' 个大类 · ' + totalItems + ' 个子类目'
+    + ((keyword || filter !== 'all') ? ' · 当前匹配 ' + matchedItems + ' 项' : '')
+}
+
+const highlightText = (text, keyword) => {
+  if (!keyword) return text
+  const re = new RegExp('(' + keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'gi')
+  return text.replace(re, '<span class="highlight">$1</span>')
+}
+
+const toggleBlock = el => {
+  el.classList.toggle('open')
+  const body = el.nextElementSibling
+  body.classList.toggle('open')
+}
+
+const setFilter = (filter, btn) => {
+  currentFilter = filter
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'))
+  btn.classList.add('active')
+  filterCategories()
+}
+
+const filterCategories = () => {
+  const keyword = document.getElementById('searchInput').value.trim()
+  renderCategories(CATEGORIES, keyword, currentFilter)
+}
+
+const goCalc = rate => {
+  window.location.href = 'index.html?comm=' + rate
+}
+
+renderCategories(CATEGORIES, '', 'all')
+</script>
+</body>
+</html>

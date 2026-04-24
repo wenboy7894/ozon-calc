@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Ozon 利润计算指南 — ОСНО 一般税制</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --blue:#005bff;--blue2:#0041cc;--blue-l:#e8f0ff;
+  --orange:#ff6900;--orange-l:#fff3eb;
+  --green:#00b96b;--green-l:#e6faf2;
+  --red:#ff3b30;--red-l:#fff0ef;
+  --purple:#7c3aed;
+  --bg:#f0f4ff;--card:#fff;
+  --b1:#dde3f0;--b2:#eef1f8;
+  --t1:#111827;--t2:#374151;--t3:#6b7280;--t4:#9ca3af;
+  --r:8px;
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--t1);font-size:14px;line-height:1.6;min-height:100vh;display:flex;flex-direction:column}
+.hd{background:linear-gradient(90deg,#0a1f5c 0%,#005bff 100%);color:#fff;height:36px;flex-shrink:0;display:flex;align-items:center;padding:0 14px;gap:10px}
+.hd-logo{background:rgba(255,255,255,.15);border-radius:8px;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:11px;letter-spacing:-1px;border:1px solid rgba(255,255,255,.25)}
+.hd h1{font-size:12px;font-weight:700}
+.hd p{font-size:11px;opacity:.7;margin-left:4px}
+.hd-badge{margin-left:auto;background:rgba(255,105,0,.8);border-radius:10px;padding:2px 10px;font-size:11px;font-weight:600}
+.hd-link{color:#fff;text-decoration:none;font-size:11px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);border-radius:5px;padding:3px 10px;margin-left:6px;white-space:nowrap;transition:background .2s}
+.hd-link:hover{background:rgba(255,255,255,.3)}
+.main{max-width:960px;width:100%;margin:0 auto;padding:20px 16px 40px}
+.hero{text-align:center;margin-bottom:28px}
+.hero h2{font-size:22px;font-weight:800;color:var(--t1);margin-bottom:6px}
+.hero p{font-size:13px;color:var(--t3)}
+.card{background:var(--card);border:1px solid var(--b1);border-radius:var(--r);overflow:hidden;margin-bottom:20px}
+.ct{padding:10px 16px;font-size:13px;font-weight:700;color:var(--t2);border-bottom:1px solid var(--b2);display:flex;align-items:center;gap:8px;background:var(--bg)}
+.ct .ico{width:22px;height:22px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:12px}
+.cb{padding:16px}
+.note{background:var(--blue-l);border:1px solid #c5d8ff;border-radius:6px;padding:10px 14px;font-size:12px;color:var(--blue);line-height:1.7;margin-top:12px}
+.note strong{font-weight:700}
+svg{max-width:100%;height:auto}
+.bottom-bar{text-align:center;margin-top:10px;padding:20px}
+.bottom-bar p{font-size:12px;color:var(--t3);margin-bottom:12px}
+.back-btn{display:inline-block;padding:8px 28px;background:linear-gradient(90deg,var(--blue),var(--blue2));color:#fff;border:none;border-radius:6px;font-size:13px;font-weight:700;cursor:pointer;text-decoration:none;transition:opacity .15s}
+.back-btn:hover{opacity:.9}
+@media(max-width:600px){
+  .main{padding:12px 8px 30px}
+  .hero h2{font-size:18px}
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="hd">
+  <div class="hd-logo">OZ</div>
+  <h1>Ozon 利润计算指南</h1>
+  <p>ОСНО 一般税制 · 图解教学</p>
+  <div class="hd-badge">2026</div>
+  <a href="index.html" class="hd-link">← 返回计算器</a>
+</div>
+
+<div class="main">
+
+<!-- HERO -->
+<div class="hero">
+  <h2>Ozon 本土公司利润计算指南 — ОСНО 一般税制</h2>
+  <p>用图示方式，一步步拆解从售价到净利润的完整计算逻辑</p>
+</div>
+
+<!-- ============ CHART 1: 成本构成 ============ -->
+<div class="card">
+  <div class="ct"><div class="ico" style="background:#e6faf2">📦</div>第一张图：单件商品落地成本构成</div>
+  <div class="cb">
+    <svg viewBox="0 0 700 160" xmlns="http://www.w3.org/2000/svg" style="width:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif">
+      <!-- Background -->
+      <rect x="0" y="0" width="700" height="160" fill="#f8faff" rx="6"/>
+
+      <!-- Title -->
+      <text x="350" y="24" text-anchor="middle" font-size="13" font-weight="700" fill="#111827">单件落地成本 = 800₽</text>
+
+      <!-- Stacked bar -->
+      <!-- Total width for bar: 560px (80~640), total=800, scale=0.7px per ruble -->
+      <!-- 工厂货值 600₽ → 420px -->
+      <rect x="80" y="45" width="420" height="44" rx="4" fill="#9ca3af"/>
+      <text x="290" y="72" text-anchor="middle" font-size="12" font-weight="600" fill="#fff">工厂货值 600₽</text>
+
+      <!-- 头程运费 200₽ → 140px -->
+      <rect x="500" y="45" width="140" height="44" rx="0" fill="#4b5563"/>
+      <text x="570" y="72" text-anchor="middle" font-size="11" font-weight="600" fill="#fff">头程 200₽</text>
+
+      <!-- 清关费用 0₽ (示意用小块) -->
+      <rect x="640" y="45" width="1" height="44" rx="0" fill="#92400e" opacity="0.3"/>
+
+      <!-- Bracket below -->
+      <line x1="80" y1="96" x2="80" y2="106" stroke="#6b7280" stroke-width="1.5"/>
+      <line x1="80" y1="106" x2="640" y2="106" stroke="#6b7280" stroke-width="1.5"/>
+      <line x1="640" y1="96" x2="640" y2="106" stroke="#6b7280" stroke-width="1.5"/>
+      <line x1="360" y1="106" x2="360" y2="118" stroke="#6b7280" stroke-width="1.5"/>
+      <text x="360" y="132" text-anchor="middle" font-size="12" font-weight="700" fill="#005bff">落地成本 = 800₽/件</text>
+
+      <!-- Legend -->
+      <rect x="80" y="145" width="10" height="10" rx="2" fill="#9ca3af"/>
+      <text x="95" y="154" font-size="10" fill="#6b7280">工厂货值</text>
+      <rect x="170" y="145" width="10" height="10" rx="2" fill="#4b5563"/>
+      <text x="185" y="154" font-size="10" fill="#6b7280">头程运费</text>
+      <rect x="260" y="145" width="10" height="10" rx="2" fill="#92400e"/>
+      <text x="275" y="154" font-size="10" fill="#6b7280">清关费用（关税+服务费）</text>
+    </svg>
+    <div class="note">
+      <strong>落地成本 = 工厂货值 + 头程运费分摊 + 清关费用（关税 + 清关服务费）</strong><br>
+      这是你每卖出一件商品的最低成本底线。售价必须高于此值才有可能盈利。
+    </div>
+  </div>
+</div>
+
+<!-- ============ CHART 2: 瀑布图 ============ -->
+<div class="card">
+  <div class="ct"><div class="ico" style="background:#fff3eb">💸</div>第二张图：从售价到净利润 — 瀑布图（Waterfall Chart）</div>
+  <div class="cb">
+    <svg viewBox="0 0 780 520" xmlns="http://www.w3.org/2000/svg" style="width:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif">
+      <defs>
+        <linearGradient id="blueG" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#005bff"/><stop offset="100%" stop-color="#0041cc"/></linearGradient>
+        <linearGradient id="greenG" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#00b96b"/><stop offset="100%" stop-color="#009955"/></linearGradient>
+      </defs>
+      <rect x="0" y="0" width="780" height="520" fill="#f8faff" rx="6"/>
+
+      <!-- Y axis baseline and scale: 0₽ at y=470, 2000₽ at y=70. Scale: 1₽ = 0.2px -->
+      <!-- Gridlines -->
+      <line x1="55" y1="70" x2="760" y2="70" stroke="#eef1f8" stroke-width="1"/>
+      <line x1="55" y1="170" x2="760" y2="170" stroke="#eef1f8" stroke-width="1"/>
+      <line x1="55" y1="270" x2="760" y2="270" stroke="#eef1f8" stroke-width="1"/>
+      <line x1="55" y1="370" x2="760" y2="370" stroke="#eef1f8" stroke-width="1"/>
+      <line x1="55" y1="470" x2="760" y2="470" stroke="#dde3f0" stroke-width="1.5"/>
+
+      <!-- Y axis labels -->
+      <text x="50" y="74" text-anchor="end" font-size="10" fill="#9ca3af">2000₽</text>
+      <text x="50" y="174" text-anchor="end" font-size="10" fill="#9ca3af">1500₽</text>
+      <text x="50" y="274" text-anchor="end" font-size="10" fill="#9ca3af">1000₽</text>
+      <text x="50" y="374" text-anchor="end" font-size="10" fill="#9ca3af">500₽</text>
+      <text x="50" y="474" text-anchor="end" font-size="10" fill="#9ca3af">0₽</text>
+
+      <!-- Bar positions: x starts at 70, each bar 60px wide, gap 10px. Total 11 bars -->
+      <!-- Scale: value * 0.2 = pixel height. y_top = 470 - cumulative*0.2 -->
+
+      <!-- Bar 1: 售价 2000₽, bottom=470, top=70, height=400 -->
+      <rect x="70" y="70" width="56" height="400" rx="3" fill="url(#blueG)"/>
+      <text x="98" y="62" text-anchor="middle" font-size="11" font-weight="700" fill="#005bff">2000₽</text>
+      <text x="98" y="488" text-anchor="middle" font-size="9" font-weight="600" fill="#374151">售价</text>
+
+      <!-- Dashed connector from bar1 bottom-right to bar2 top-left: y=70+(2000-1820)*0.2=70+36=106 -->
+      <!-- Bar 2: 佣金 -180₽, top=70, bottom=70+36=106, height=36 -->
+      <line x1="126" y1="70" x2="136" y2="70" stroke="#9ca3af" stroke-width="1" stroke-dasharray="3,2"/>
+      <rect x="136" y="70" width="56" height="36" rx="3" fill="#ff6900"/>
+      <text x="164" y="62" text-anchor="middle" font-size="10" font-weight="600" fill="#ff6900">-180₽</text>
+      <text x="164" y="488" text-anchor="middle" font-size="8" font-weight="600" fill="#374151">佣金9%</text>
+
+      <!-- Bar 3: 收单费 -30₽, top=106, bottom=106+6=112, height=6 -->
+      <line x1="192" y1="106" x2="202" y2="106" stroke="#9ca3af" stroke-width="1" stroke-dasharray="3,2"/>
+      <rect x="202" y="106" width="56" height="6" rx="2" fill="#7c3aed"/>
+      <text x="230" y="100" text-anchor="middle" font-size="10" font-weight="600" fill="#7c3aed">-30₽</text>
+      <text x="230" y="488" text-anchor="middle" font-size="8" font-weight="600" fill="#374151">收单费</text>
+      <text x="230" y="500" text-anchor="middle" font-size="7" fill="#9ca3af">Эквайринг</text>
+
+      <!-- Bar 4: 物流 -89₽, top=112, bottom=112+17.8≈130, height≈18 -->
+      <line x1="258" y1="112" x2="268" y2="112" stroke="#9ca3af" stroke-width="1" stroke-dasharray="3,2"/>
+      <rect x="268" y="112" width="56" height="18" rx="3" fill="#d97706"/>
+      <text x="296" y="106" text-anchor="middle" font-size="10" font-weight="600" fill="#d97706">-89₽</text>
+      <text x="296" y="488" text-anchor="middle" font-size="8" font-weight="600" fill="#374151">物流费</text>
+      <text x="296" y="500" text-anchor="middle" font-size="7" fill="#9ca3af">FBO配送</text>
+
+      <!-- Bar 5: 退货分摊 -20₽, top=130, bottom=130+4=134, height=4 -->
+      <line x1="324" y1="130" x2="334" y2="130" stroke="#9ca3af" stroke-width="1" stroke-dasharray="3,2"/>
+      <rect x="334" y="130" width="56" height="4" rx="2" fill="#dc2626"/>
+      <text x="362" y="124" text-anchor="middle" font-size="10" font-weight="600" fill="#dc2626">-20₽</text>
+      <text x="362" y="488" text-anchor="middle" font-size="8" font-weight="600" fill="#374151">退货</text>
+      <text x="362" y="500" text-anchor="middle" font-size="7" fill="#9ca3af">分摊</text>
+
+      <!-- Bar 6: 落地成本 -800₽, top=134, bottom=134+160=294, height=160 -->
+      <line x1="390" y1="134" x2="400" y2="134" stroke="#9ca3af" stroke-width="1" stroke-dasharray="3,2"/>
+      <rect x="400" y="134" width="56" height="160" rx="3" fill="#6b7280"/>
+      <text x="428" y="128" text-anchor="middle" font-size="10" font-weight="700" fill="#6b7280">-800₽</text>
+      <text x="428" y="488" text-anchor="middle" font-size="8" font-weight="600" fill="#374151">落地</text>
+      <text x="428" y="500" text-anchor="middle" font-size="7" fill="#9ca3af">成本</text>
+
+      <!-- Bar 7: 广告 -50₽, top=294, bottom=294+10=304, height=10 -->
+      <line x1="456" y1="294" x2="466" y2="294" stroke="#9ca3af" stroke-width="1" stroke-dasharray="3,2"/>
+      <rect x="466" y="294" width="56" height="10" rx="2" fill="#0891b2"/>
+      <text x="494" y="288" text-anchor="middle" font-size="10" font-weight="600" fill="#0891b2">-50₽</text>
+      <text x="494" y="488" text-anchor="middle" font-size="8" font-weight="600" fill="#374151">广告</text>
+
+      <!-- Bar 8: 杂费 -20₽, top=304, bottom=304+4=308, height=4 -->
+      <line x1="522" y1="304" x2="532" y2="304" stroke="#9ca3af" stroke-width="1" stroke-dasharray="3,2"/>
+      <rect x="532" y="304" width="56" height="4" rx="2" fill="#94a3b8"/>
+      <text x="560" y="298" text-anchor="middle" font-size="10" font-weight="600" fill="#94a3b8">-20₽</text>
+      <text x="560" y="488" text-anchor="middle" font-size="8" font-weight="600" fill="#374151">杂费</text>
+
+      <!-- Bar 9: НДС -60₽, top=308, bottom=308+12=320, height=12 -->
+      <line x1="588" y1="308" x2="598" y2="308" stroke="#9ca3af" stroke-width="1" stroke-dasharray="3,2"/>
+      <rect x="598" y="308" width="56" height="12" rx="2" fill="#e67e22"/>
+      <text x="626" y="302" text-anchor="middle" font-size="10" font-weight="600" fill="#e67e22">-60₽</text>
+      <text x="626" y="488" text-anchor="middle" font-size="8" font-weight="600" fill="#374151">НДС</text>
+      <text x="626" y="500" text-anchor="middle" font-size="7" fill="#9ca3af">增值税</text>
+
+      <!-- Bar 10: 所得税 -80₽, top=320, bottom=320+16=336, height=16 -->
+      <line x1="654" y1="320" x2="664" y2="320" stroke="#9ca3af" stroke-width="1" stroke-dasharray="3,2"/>
+      <rect x="664" y="320" width="56" height="16" rx="3" fill="#d35400"/>
+      <text x="692" y="314" text-anchor="middle" font-size="10" font-weight="600" fill="#d35400">-80₽</text>
+      <text x="692" y="488" text-anchor="middle" font-size="8" font-weight="600" fill="#374151">所得税</text>
+      <text x="692" y="500" text-anchor="middle" font-size="7" fill="#9ca3af">25%</text>
+
+      <!-- Dashed connector to profit bar -->
+      <line x1="720" y1="336" x2="730" y2="336" stroke="#9ca3af" stroke-width="1" stroke-dasharray="3,2"/>
+
+      <!-- Bar 11: 净利润 671₽, bottom=470, top=470-671*0.2=470-134.2≈336, height≈134 -->
+      <rect x="730" y="336" width="28" height="134" rx="3" fill="url(#greenG)"/>
+      <text x="744" y="330" text-anchor="middle" font-size="11" font-weight="700" fill="#00b96b">671₽</text>
+      <text x="744" y="488" text-anchor="middle" font-size="8" font-weight="700" fill="#00b96b">净利润</text>
+
+      <!-- Annotation arrow: profit margin -->
+      <line x1="744" y1="345" x2="770" y2="345" stroke="#00b96b" stroke-width="1"/>
+      <text x="772" y="349" font-size="9" font-weight="600" fill="#00b96b">≈33.6%</text>
+      <text x="772" y="361" font-size="8" fill="#9ca3af">利润率</text>
+    </svg>
+
+    <div class="note">
+      <strong>瀑布图阅读方法：</strong>从左侧售价（蓝色）开始，每一个红/橙色柱子代表一项扣费，柱子越高扣费越多。最右侧绿色柱子就是最终到手的净利润。<br>
+      <strong>最大的两块扣费：</strong>商品落地成本（货值+头程）和平台佣金，这两项决定了你的利润空间。<br>
+      注意：以上数字为示例数据（售价2000₽、货值600₽、佣金9%），实际结果因参数而异。
+    </div>
+  </div>
+</div>
+
+<!-- ============ CHART 3: 税务流程图 ============ -->
+<div class="card">
+  <div class="ct"><div class="ico" style="background:#e8f0ff">📋</div>第三张图：ОСНО 税务计算流程图</div>
+  <div class="cb">
+    <svg viewBox="0 0 700 620" xmlns="http://www.w3.org/2000/svg" style="width:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif">
+      <rect x="0" y="0" width="700" height="620" fill="#f8faff" rx="6"/>
+
+      <!-- Top: 售价 -->
+      <rect x="250" y="16" width="200" height="40" rx="20" fill="#005bff"/>
+      <text x="350" y="41" text-anchor="middle" font-size="14" font-weight="700" fill="#fff">售价 2000₽</text>
+
+      <!-- Arrow down -->
+      <line x1="350" y1="56" x2="350" y2="80" stroke="#005bff" stroke-width="2"/>
+      <polygon points="344,76 350,86 356,76" fill="#005bff"/>
+
+      <!-- Box 1: НДС -->
+      <rect x="60" y="90" width="580" height="210" rx="8" fill="#fff" stroke="#005bff" stroke-width="2"/>
+      <rect x="60" y="90" width="580" height="36" rx="8" fill="#005bff"/>
+      <rect x="60" y="118" width="580" height="8" fill="#005bff"/>
+      <text x="350" y="114" text-anchor="middle" font-size="14" font-weight="700" fill="#fff">第一层：НДС 增值税（税率 22%）</text>
+
+      <!-- Left column: 销项税 -->
+      <rect x="85" y="140" width="240" height="70" rx="6" fill="#e8f0ff" stroke="#c5d8ff" stroke-width="1"/>
+      <text x="205" y="160" text-anchor="middle" font-size="12" font-weight="700" fill="#005bff">销项税（你要交的）</text>
+      <text x="205" y="178" text-anchor="middle" font-size="11" fill="#374151">= 售价 × 22 / 122</text>
+      <text x="205" y="198" text-anchor="middle" font-size="13" font-weight="800" fill="#005bff">= 360.66₽</text>
+
+      <!-- Minus sign -->
+      <text x="350" y="180" text-anchor="middle" font-size="24" font-weight="900" fill="#ff3b30">−</text>
+
+      <!-- Right column: 进项税 -->
+      <rect x="375" y="140" width="240" height="70" rx="6" fill="#e6faf2" stroke="#a7f3d0" stroke-width="1"/>
+      <text x="495" y="160" text-anchor="middle" font-size="12" font-weight="700" fill="#00b96b">进项税（可以抵扣的）</text>
+      <text x="495" y="178" text-anchor="middle" font-size="11" fill="#374151">= 可抵扣成本 × 22 / 122</text>
+      <text x="495" y="198" text-anchor="middle" font-size="13" font-weight="800" fill="#00b96b">≈ 200₽</text>
+
+      <!-- Result row -->
+      <line x1="85" y1="225" x2="615" y2="225" stroke="#dde3f0" stroke-width="1"/>
+      <text x="140" y="248" font-size="11" fill="#6b7280">可抵扣项：货值 + 佣金 + 物流 + 广告</text>
+      <rect x="420" y="232" width="180" height="30" rx="6" fill="#fff3eb" stroke="#ffd48a" stroke-width="1"/>
+      <text x="510" y="252" text-anchor="middle" font-size="12" font-weight="700" fill="#ff6900">应缴 НДС ≈ 160₽</text>
+
+      <!-- Arrow down -->
+      <line x1="350" y1="300" x2="350" y2="330" stroke="#005bff" stroke-width="2"/>
+      <polygon points="344,326 350,336 356,326" fill="#005bff"/>
+
+      <!-- Box 2: 所得税 -->
+      <rect x="60" y="340" width="580" height="200" rx="8" fill="#fff" stroke="#ff6900" stroke-width="2"/>
+      <rect x="60" y="340" width="580" height="36" rx="8" fill="#ff6900"/>
+      <rect x="60" y="368" width="580" height="8" fill="#ff6900"/>
+      <text x="350" y="364" text-anchor="middle" font-size="14" font-weight="700" fill="#fff">第二层：所得税 налог на прибыль（税率 25%）</text>
+
+      <!-- Income row -->
+      <rect x="85" y="390" width="250" height="56" rx="6" fill="#e8f0ff" stroke="#c5d8ff" stroke-width="1"/>
+      <text x="210" y="410" text-anchor="middle" font-size="12" font-weight="700" fill="#005bff">不含税收入</text>
+      <text x="210" y="428" text-anchor="middle" font-size="11" fill="#374151">= 售价 × 100/122 = 1639₽</text>
+
+      <!-- Minus -->
+      <text x="350" y="422" text-anchor="middle" font-size="24" font-weight="900" fill="#ff3b30">−</text>
+
+      <!-- Expense row -->
+      <rect x="365" y="390" width="250" height="56" rx="6" fill="#fff0ef" stroke="#fca5a5" stroke-width="1"/>
+      <text x="490" y="410" text-anchor="middle" font-size="12" font-weight="700" fill="#ff3b30">不含税支出</text>
+      <text x="490" y="428" text-anchor="middle" font-size="11" fill="#374151">= 成本×100/122 + 收单费 + 杂费</text>
+
+      <!-- Result -->
+      <line x1="85" y1="460" x2="615" y2="460" stroke="#dde3f0" stroke-width="1"/>
+      <text x="140" y="482" font-size="11" fill="#6b7280">应税利润 = 不含税收入 − 不含税支出</text>
+      <rect x="420" y="468" width="180" height="30" rx="6" fill="#fff3eb" stroke="#ffd48a" stroke-width="1"/>
+      <text x="510" y="488" text-anchor="middle" font-size="12" font-weight="700" fill="#ff6900">所得税 ≈ 80₽</text>
+      <text x="140" y="500" font-size="11" fill="#6b7280">所得税 = 应税利润 × 25%</text>
+      <text x="140" y="516" font-size="10" fill="#9ca3af">注意：收单费（Эквайринг）免НДС，不参与进项抵扣但可作为所得税支出</text>
+
+      <!-- Arrow down -->
+      <line x1="350" y1="540" x2="350" y2="565" stroke="#ff6900" stroke-width="2"/>
+      <polygon points="344,561 350,571 356,561" fill="#ff6900"/>
+
+      <!-- Total -->
+      <rect x="200" y="575" width="300" height="36" rx="18" fill="#ff3b30"/>
+      <text x="350" y="598" text-anchor="middle" font-size="14" font-weight="700" fill="#fff">总税负 = НДС 160₽ + 所得税 80₽ = 240₽</text>
+    </svg>
+
+    <div class="note">
+      <strong>ОСНО 的核心：两层税。</strong><br>
+      第一层 НДС（增值税）：你卖货收到的税（销项）减去你采购付出的税（进项），差额上缴。进项越多，实际缴税越少。<br>
+      第二层所得税：在去掉增值税之后，收入减去支出的利润部分，再交 25%。<br>
+      <strong>关键点：</strong>收单手续费（Эквайринг）是免НДС的，所以不能用来抵扣增值税进项，但可以作为所得税的费用扣除。
+    </div>
+  </div>
+</div>
+
+<!-- ============ CHART 4: 佣金对利润影响 ============ -->
+<div class="card">
+  <div class="ct"><div class="ico" style="background:#f3e8ff">📊</div>第四张图：不同类目佣金率对利润率的影响</div>
+  <div class="cb">
+    <svg viewBox="0 0 700 340" xmlns="http://www.w3.org/2000/svg" style="width:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif">
+      <rect x="0" y="0" width="700" height="340" fill="#f8faff" rx="6"/>
+
+      <!-- Title -->
+      <text x="350" y="24" text-anchor="middle" font-size="13" font-weight="700" fill="#111827">同一商品（售价2000₽、货值600₽），不同佣金率下的利润率对比</text>
+
+      <!-- Y axis: -10% to 40%, range=50. Chart area: y=50 to y=300, height=250. 0% at y=250. Scale: 1%=5px -->
+      <!-- Gridlines -->
+      <line x1="80" y1="50" x2="660" y2="50" stroke="#eef1f8" stroke-width="1"/>
+      <line x1="80" y1="100" x2="660" y2="100" stroke="#eef1f8" stroke-width="1"/>
+      <line x1="80" y1="150" x2="660" y2="150" stroke="#eef1f8" stroke-width="1"/>
+      <line x1="80" y1="200" x2="660" y2="200" stroke="#eef1f8" stroke-width="1"/>
+      <line x1="80" y1="250" x2="660" y2="250" stroke="#ff3b30" stroke-width="1" stroke-dasharray="6,3" opacity="0.5"/>
+      <line x1="80" y1="300" x2="660" y2="300" stroke="#eef1f8" stroke-width="1"/>
+
+      <!-- Y axis labels -->
+      <text x="75" y="54" text-anchor="end" font-size="10" fill="#9ca3af">40%</text>
+      <text x="75" y="104" text-anchor="end" font-size="10" fill="#9ca3af">30%</text>
+      <text x="75" y="154" text-anchor="end" font-size="10" fill="#9ca3af">20%</text>
+      <text x="75" y="204" text-anchor="end" font-size="10" fill="#9ca3af">10%</text>
+      <text x="75" y="254" text-anchor="end" font-size="10" font-weight="600" fill="#ff3b30">0%</text>
+      <text x="75" y="304" text-anchor="end" font-size="10" fill="#9ca3af">-10%</text>
+
+      <!-- Zero line label -->
+      <text x="665" y="246" font-size="9" fill="#ff3b30" font-weight="600">盈亏线</text>
+
+      <!-- Bars: 5 categories, each 80px wide, gap 30px. Start x=110 -->
+
+      <!-- Bar 1: 食品 5% → 35% profit. height=35*5=175, top=250-175=75 -->
+      <rect x="110" y="75" width="80" height="175" rx="4" fill="#00b96b"/>
+      <text x="150" y="67" text-anchor="middle" font-size="12" font-weight="700" fill="#00b96b">35%</text>
+      <text x="150" y="160" text-anchor="middle" font-size="11" font-weight="600" fill="#fff">食品</text>
+      <text x="150" y="315" text-anchor="middle" font-size="11" font-weight="600" fill="#374151">食品饮料</text>
+      <text x="150" y="328" text-anchor="middle" font-size="10" fill="#9ca3af">佣金 5%</text>
+
+      <!-- Bar 2: 电子 9% → 28% profit. height=28*5=140, top=250-140=110 -->
+      <rect x="220" y="110" width="80" height="140" rx="4" fill="#00b96b"/>
+      <text x="260" y="102" text-anchor="middle" font-size="12" font-weight="700" fill="#00b96b">28%</text>
+      <text x="260" y="178" text-anchor="middle" font-size="11" font-weight="600" fill="#fff">电子</text>
+      <text x="260" y="315" text-anchor="middle" font-size="11" font-weight="600" fill="#374151">电子数码</text>
+      <text x="260" y="328" text-anchor="middle" font-size="10" fill="#9ca3af">佣金 9%</text>
+
+      <!-- Bar 3: 家居 12% → 24% profit. height=24*5=120, top=250-120=130 -->
+      <rect x="330" y="130" width="80" height="120" rx="4" fill="#00b96b"/>
+      <text x="370" y="122" text-anchor="middle" font-size="12" font-weight="700" fill="#00b96b">24%</text>
+      <text x="370" y="188" text-anchor="middle" font-size="11" font-weight="600" fill="#fff">家居</text>
+      <text x="370" y="315" text-anchor="middle" font-size="11" font-weight="600" fill="#374151">家居日用</text>
+      <text x="370" y="328" text-anchor="middle" font-size="10" fill="#9ca3af">佣金 12%</text>
+
+      <!-- Bar 4: 美妆 15% → 20% profit. height=20*5=100, top=250-100=150 -->
+      <rect x="440" y="150" width="80" height="100" rx="4" fill="#00b96b" opacity="0.8"/>
+      <text x="480" y="142" text-anchor="middle" font-size="12" font-weight="700" fill="#00b96b">20%</text>
+      <text x="480" y="198" text-anchor="middle" font-size="11" font-weight="600" fill="#fff">美妆</text>
+      <text x="480" y="315" text-anchor="middle" font-size="11" font-weight="600" fill="#374151">美妆个护</text>
+      <text x="480" y="328" text-anchor="middle" font-size="10" fill="#9ca3af">佣金 15%</text>
+
+      <!-- Bar 5: 服装 45% → -5% profit. height=5*5=25, top=250, goes DOWN to 275 -->
+      <rect x="550" y="250" width="80" height="25" rx="4" fill="#ff3b30"/>
+      <text x="590" y="295" text-anchor="middle" font-size="12" font-weight="700" fill="#ff3b30">-5%</text>
+      <text x="590" y="265" text-anchor="middle" font-size="11" font-weight="600" fill="#fff">亏损!</text>
+      <text x="590" y="315" text-anchor="middle" font-size="11" font-weight="600" fill="#ff3b30">服装鞋帽</text>
+      <text x="590" y="328" text-anchor="middle" font-size="10" fill="#ff3b30">佣金 45%</text>
+    </svg>
+
+    <div class="note">
+      <strong>佣金率是利润的最大变量之一。</strong><br>
+      同样的商品成本结构，食品类（5%佣金）可以有 35% 的利润率，而服装类（45%佣金）直接亏损。<br>
+      <strong>选品建议：</strong>优先选择佣金率 ≤ 15% 的类目（食品、电子、宠物、家居），避开 40%+ 的高佣金类目（服装、儿童用品、卫生用品）。
+    </div>
+  </div>
+</div>
+
+<!-- ============ BOTTOM ============ -->
+<div class="bottom-bar">
+  <p>以上数据基于示例参数（售价 2000₽、工厂货值 600₽、头程运费 200₽），实际结果请使用计算器精确计算。</p>
+  <a href="index.html" class="back-btn">← 返回利润计算器</a>
+</div>
+
+</div><!-- /main -->
+</body>
+</html>

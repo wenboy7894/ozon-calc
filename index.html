@@ -1,0 +1,1317 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Ozon 利润计算器 2026</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --blue:#005bff;--blue2:#0041cc;--blue-l:#e8f0ff;
+  --orange:#ff6900;--orange-l:#fff3eb;
+  --green:#00b96b;--green-l:#e6faf2;
+  --red:#ff3b30;--red-l:#fff0ef;
+  --purple:#7c3aed;
+  --bg:#f0f4ff;--card:#fff;
+  --b1:#dde3f0;--b2:#eef1f8;
+  --t1:#111827;--t2:#374151;--t3:#6b7280;--t4:#9ca3af;
+  --r:8px;
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--t1);font-size:12px;line-height:1.4;min-height:100vh;display:flex;flex-direction:column}
+.hd{background:linear-gradient(90deg,#0a1f5c 0%,#005bff 100%);color:#fff;height:36px;flex-shrink:0;display:flex;align-items:center;padding:0 14px;gap:10px}
+.hd-logo{background:rgba(255,255,255,.15);border-radius:8px;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:11px;letter-spacing:-1px;border:1px solid rgba(255,255,255,.25)}
+.hd h1{font-size:12px;font-weight:700}
+.hd p{font-size:11px;opacity:.7;margin-left:4px}
+.hd-badge{margin-left:auto;background:rgba(255,105,0,.8);border-radius:10px;padding:2px 10px;font-size:11px;font-weight:600}
+/* HERO PROFIT BAR */
+.profit-bar{flex-shrink:0;background:var(--card);border-bottom:2px solid var(--b1);padding:10px 16px;display:flex;align-items:center;gap:24px;flex-wrap:wrap}
+.profit-hero{display:flex;flex-direction:column;gap:2px}
+.profit-label{font-size:10px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.5px}
+.profit-main-num{font-size:36px;font-weight:900;color:var(--green);font-variant-numeric:tabular-nums;transition:color .2s;line-height:1}
+.profit-main-num.neg{color:var(--red)}
+.profit-kpis{display:flex;gap:8px;flex-wrap:wrap}
+.kpi-chip{background:var(--bg);border:1px solid var(--b1);border-radius:6px;padding:5px 12px;min-width:90px}
+.kpi-chip .kc-l{font-size:9px;color:var(--t4);text-transform:uppercase;letter-spacing:.4px}
+.kpi-chip .kc-v{font-size:15px;font-weight:800;color:var(--t1);font-variant-numeric:tabular-nums}
+.kpi-chip.green .kc-v{color:var(--green)}
+.kpi-chip.orange .kc-v{color:var(--orange)}
+.kpi-chip.blue .kc-v{color:var(--blue)}
+/* PRESETS */
+.presets-bar{flex-shrink:0;background:var(--card);border-bottom:1px solid var(--b1);padding:5px 12px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.preset-label{font-size:10px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.6px;white-space:nowrap}
+.pb{padding:3px 10px;border:1.5px solid var(--b1);border-radius:5px;background:var(--bg);cursor:pointer;font-size:11px;font-weight:600;color:var(--t2);transition:all .15s;white-space:nowrap}
+.pb:hover{border-color:var(--blue);color:var(--blue);background:var(--blue-l)}
+.pb small{display:block;font-size:10px;font-weight:400;color:var(--t4);margin-top:1px}
+.pb.last-used{border-color:var(--orange);color:var(--orange);background:var(--orange-l)}
+#presetBanner{display:none;align-items:center;gap:8px;background:linear-gradient(90deg,#0a1f5c,#005bff);color:#fff;border-radius:6px;padding:5px 10px;font-size:11px;margin-left:auto}
+/* WORKSPACE */
+.ws{flex:1;display:grid;grid-template-columns:380px 1fr;min-height:0}
+.lp{border-right:1px solid var(--b1);background:var(--card);overflow-y:auto;max-height:calc(100vh - 120px);padding:8px 10px;display:flex;flex-direction:column;gap:6px}
+.rp{background:var(--bg);display:flex;flex-direction:column;overflow-y:auto;max-height:calc(100vh - 120px)}
+/* CARDS */
+.card{background:var(--card);border:1px solid var(--b1);border-radius:var(--r);overflow:hidden}
+.ct{padding:5px 10px;font-size:11px;font-weight:700;color:var(--t2);border-bottom:1px solid var(--b2);display:flex;align-items:center;gap:5px;background:var(--bg)}
+.ct .ico{width:18px;height:18px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:10px}
+.cb{padding:7px 10px;display:flex;flex-direction:column;gap:5px}
+/* INPUTS */
+.fg{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.fg3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
+.field{display:flex;flex-direction:column;gap:2px}
+.field label{font-size:11px;font-weight:600;color:var(--t3);text-transform:uppercase;letter-spacing:.3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.field .hint{font-size:10px;color:var(--t4);font-weight:400;text-transform:none;letter-spacing:0}
+.iw{position:relative}
+.iw .unit{position:absolute;right:7px;top:50%;transform:translateY(-50%);font-size:11px;color:var(--t4)}
+input[type=number],select{width:100%;height:26px;padding:0 6px;font-size:11px;color:var(--t1);background:var(--bg);border:1.5px solid var(--b1);border-radius:5px;outline:none;appearance:none;transition:border-color .15s}
+input[type=number]:focus,select:focus{border-color:var(--blue);background:#fff}
+input[type=number].hu{padding-right:28px}
+select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10'%3E%3Cpath fill='%236b7280' d='M5 7L1 3h8z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 7px center;padding-right:24px}
+/* COLLAPSIBLE */
+.collapsible-hd{cursor:pointer;user-select:none}
+.collapsible-hd:hover{background:var(--blue-l)}
+.collapsible-body{display:none}
+.collapsible-body.open{display:flex;flex-direction:column;gap:5px}
+/* TAX TABS */
+.tax-tabs{display:flex;gap:3px;flex-wrap:wrap}
+.tax-tab{padding:3px 7px;border:1.5px solid var(--b1);border-radius:4px;background:var(--bg);cursor:pointer;font-size:10px;font-weight:600;color:var(--t3);transition:all .15s;line-height:1.3}
+.tax-tab:hover{border-color:var(--blue);color:var(--blue)}
+.tax-tab.active{border-color:var(--blue);background:var(--blue-l);color:var(--blue)}
+.tax-tab .sub{font-size:10px;font-weight:400;display:block;opacity:.8}
+.tax-info{margin-top:4px;background:var(--blue-l);border:1px solid #c5d8ff;border-radius:5px;padding:4px 8px;display:grid;grid-template-columns:repeat(3,1fr);gap:4px}
+.ti-item .ti-l{font-size:10px;color:var(--blue);opacity:.7}
+.ti-item .ti-v{font-size:11px;font-weight:700;color:var(--blue)}
+/* CALC BUTTON */
+.calc-btn{width:100%;height:32px;background:linear-gradient(90deg,var(--blue),var(--blue2));color:#fff;border:none;border-radius:5px;font-size:12px;font-weight:700;cursor:pointer;transition:all .15s;letter-spacing:.3px}
+.calc-btn:hover{opacity:.9;transform:translateY(-1px)}
+/* SHARE ROW */
+.share-row{display:flex;gap:6px}
+.share-btn{flex:1;height:28px;border:1.5px solid var(--b1);border-radius:5px;background:var(--bg);cursor:pointer;font-size:11px;font-weight:600;color:var(--t2);transition:all .15s}
+.share-btn:hover{border-color:var(--blue);color:var(--blue);background:var(--blue-l)}
+/* DIVIDER */
+.sdiv{display:flex;align-items:center;gap:6px;font-size:10px;font-weight:700;color:var(--t4);text-transform:uppercase;letter-spacing:.8px;margin:2px 0 4px}
+.sdiv::after{content:'';flex:1;height:1px;background:var(--b1)}
+/* P&L TABLE */
+.pnl-wrap{position:relative;overflow:auto}
+.pnl{width:100%;border-collapse:collapse;table-layout:fixed}
+.pnl th{padding:3px 6px;font-size:10px;font-weight:600;color:var(--t3);background:var(--bg);border-bottom:1px solid var(--b1);position:relative;user-select:none;white-space:nowrap}
+.pnl th .col-resize{position:absolute;right:-3px;top:0;bottom:0;width:6px;cursor:col-resize;z-index:2}
+.pnl th .col-resize:hover,.pnl th .col-resize.dragging{background:var(--blue);opacity:.3}
+.pnl-group td{padding:3px 6px;font-size:9px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;background:var(--b2);border-top:1px solid var(--b1);border-bottom:1px solid var(--b1)}
+.pnl tr.item td{padding:2px 6px;border-bottom:1px solid var(--b2);line-height:1.3}
+.pnl tr.item:nth-child(even) td{background:rgba(240,244,255,.3)}
+.pnl .dot{width:6px;height:6px;border-radius:50%;display:inline-block;margin-right:4px;vertical-align:middle}
+.pnl .name{color:var(--t2);font-size:11px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pnl .amt{text-align:right;font-size:11px;font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap}
+.pnl .pct{text-align:right;font-size:10px;color:var(--t4);white-space:nowrap}
+.pnl tr.revenue td{background:linear-gradient(90deg,rgba(0,91,255,.08),transparent);padding:3px 6px;border-bottom:1px solid var(--b1)}
+.pnl tr.revenue .name{font-weight:700;font-size:12px;color:var(--t1)}
+.pnl tr.revenue .amt{font-size:13px;font-weight:800;color:var(--blue)}
+.pnl tr.total-row td{padding:4px 6px;border-top:2px solid var(--blue);background:var(--bg)}
+.pnl tr.total-row .name{font-weight:800;font-size:12px}
+.pnl tr.total-row .amt{font-size:14px;font-weight:900}
+/* MONTHLY GRID */
+.mg{display:grid;grid-template-columns:repeat(3,1fr);gap:4px}
+.mg-item{background:var(--bg);border:1px solid var(--b1);border-radius:5px;padding:4px 8px}
+.mg-item .ml{font-size:10px;color:var(--t4)}
+.mg-item .mv{font-size:12px;font-weight:700;color:var(--t1);font-variant-numeric:tabular-nums}
+.mg-item .mu{font-size:10px;color:var(--t4)}
+/* BREAKEVEN */
+.be-row{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.be-item{background:var(--card);border:1px solid var(--b1);border-radius:5px;padding:5px 8px;display:flex;justify-content:space-between;align-items:center}
+.be-item .bl{font-size:11px;color:var(--t3)}
+.be-item .bv{font-size:13px;font-weight:800;color:var(--t1)}
+/* SENSITIVITY TABLE */
+.sens-table{width:100%;border-collapse:collapse;font-size:11px}
+.sens-table th{padding:5px 8px;background:var(--bg);font-size:10px;color:var(--t3);font-weight:600;border-bottom:1px solid var(--b1);text-align:right}
+.sens-table th:first-child{text-align:left}
+.sens-table td{padding:4px 8px;border-bottom:1px solid var(--b2);text-align:right;font-variant-numeric:tabular-nums}
+.sens-table td:first-child{text-align:left;font-weight:600}
+.sens-table tr.base td{background:var(--blue-l);font-weight:700}
+.sens-pos{color:var(--green);font-weight:700}
+.sens-neg{color:var(--red);font-weight:700}
+/* VAT WARNING */
+.vat-warn{display:none;background:#fff8ec;border:1px solid #ffd48a;border-radius:6px;padding:8px 12px;font-size:11px;color:#92520a;gap:6px}
+/* POLICY BOX */
+.policy-box{background:var(--card);border:1px solid var(--b1);border-radius:var(--r);overflow:hidden}
+.policy-hd{padding:7px 12px;font-size:11px;font-weight:700;color:var(--t2);background:var(--bg);border-bottom:1px solid var(--b2);cursor:pointer;display:flex;align-items:center;gap:6px}
+.policy-body{display:none;padding:10px 12px}
+.policy-item{display:flex;gap:8px;padding:5px 0;border-bottom:1px solid var(--b2);font-size:11px;color:var(--t2)}
+.policy-item:last-child{border-bottom:none}
+.policy-year{display:inline-block;background:var(--orange-l);color:var(--orange);font-weight:700;padding:1px 6px;border-radius:3px;font-size:10px;margin-right:4px}
+/* RIGHT PANEL TABS */
+.rtab-bar{display:flex;gap:0;background:var(--card);border-bottom:2px solid var(--b1);flex-shrink:0}
+.rtab{flex:1;padding:8px 4px;font-size:11px;font-weight:600;color:var(--t3);border:none;background:none;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .15s}
+.rtab:hover{color:var(--blue);background:var(--blue-l)}
+.rtab.active{color:var(--blue);border-bottom-color:var(--orange);background:var(--blue-l)}
+.rp-content{padding:10px 12px;display:flex;flex-direction:column;gap:8px}
+/* MARGIN MATRIX */
+#marginMatrix td{padding:6px 8px;border-bottom:1px solid var(--b2);font-variant-numeric:tabular-nums}
+#marginMatrix tr.highlight td{background:var(--orange-l);font-weight:700}
+#marginMatrix tr.breakeven td{background:#fff0ef}
+/* BATCH */
+.phase-card{border-radius:6px;border:1px solid var(--b1);padding:10px 12px;margin-bottom:8px}
+.phase-card:last-child{margin-bottom:0}
+.phase-header{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.phase-badge{padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700;color:#fff}
+.phase-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:6px}
+.phase-metric{background:var(--bg);border-radius:4px;padding:5px 8px}
+.phase-metric .pm{font-size:10px;color:var(--t4)}
+.phase-metric .pv{font-size:13px;font-weight:700;color:var(--t1)}
+.decision-box{border-radius:6px;padding:8px 10px;font-size:11px;margin-top:6px;line-height:1.6}
+.kpi-row{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.kpi-item{background:var(--bg);border:1px solid var(--b1);border-radius:6px;padding:8px 10px}
+.kpi-item .kl{font-size:10px;color:var(--t4)}
+.kpi-item .kv{font-size:13px;font-weight:700;color:var(--t1);margin:2px 0}
+.kpi-item .kr{font-size:10px;color:var(--t3)}
+/* SCROLLBAR */
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--b1);border-radius:2px}
+/* RESPONSIVE */
+@media(max-width:900px){
+  .ws{grid-template-columns:1fr}
+  .lp{border-right:none;max-height:none}
+  .rp{max-height:none}
+  .profit-bar{flex-direction:column;align-items:flex-start;gap:8px}
+  .profit-kpis{flex-wrap:wrap}
+  .fg{grid-template-columns:1fr}
+  .fg3{grid-template-columns:1fr 1fr}
+  .mg{grid-template-columns:1fr 1fr}
+  .phase-grid{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="hd">
+  <div class="hd-logo">OZ</div>
+  <h1>Ozon 本土公司利润计算器</h1>
+  <p>一般税制 ОСНО · 从中国发货 · 2026年最新政策</p>
+  <div class="hd-badge">2026-Q2</div>
+  <a href="categories.html" style="color:#fff;text-decoration:none;font-size:11px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);border-radius:5px;padding:3px 10px;margin-left:6px;white-space:nowrap">📋 全类目佣金表</a>
+  <a href="guide.html" style="color:#fff;text-decoration:none;font-size:11px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);border-radius:5px;padding:3px 10px;white-space:nowrap">📖 计算指南</a>
+  <a href="flow.html" style="color:#fff;text-decoration:none;font-size:11px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);border-radius:5px;padding:3px 10px;white-space:nowrap">🔄 合规流程</a>
+</div>
+
+<!-- PROFIT BAR -->
+<div class="profit-bar">
+  <div class="profit-hero">
+    <div class="profit-label">单件净利润（税后）</div>
+    <div class="profit-main-num" id="netProfitPerUnit">0.00 ₽</div>
+  </div>
+  <div class="profit-kpis">
+    <div class="kpi-chip green"><div class="kc-l">利润率</div><div class="kc-v" id="kpi-margin">0.0%</div></div>
+    <div class="kpi-chip orange"><div class="kc-l">ROI</div><div class="kc-v" id="kpi-roi">0.0%</div></div>
+    <div class="kpi-chip blue"><div class="kc-l">月净利润</div><div class="kc-v" id="kpi-monthly">0 ₽</div></div>
+    <div class="kpi-chip"><div class="kc-l">税负/件</div><div class="kc-v" id="kpi-tax">0 ₽</div></div>
+  </div>
+</div>
+
+<!-- PRESETS -->
+<div class="presets-bar">
+  <span class="preset-label">快速案例</span>
+  <button class="pb" onclick="loadPreset('homegoods')">🏠 家居日用品<small>1200₽ · 佣金12% · FBO</small></button>
+  <button class="pb" onclick="loadPreset('clothing')">👗 服装<small>2500₽ · 佣金45% · FBO</small></button>
+  <button class="pb" onclick="loadPreset('electronics')">📱 电子数码<small>5000₽ · 佣金9% · FBS</small></button>
+  <button class="pb last-used" id="lastUsedBtn" onclick="loadLastUsed()" style="display:none">🕐 上次使用<small id="lastUsedDesc"></small></button>
+  <div id="presetBanner" style="margin-left:auto">
+    <div>📌</div>
+    <div><div id="presetTitle" style="font-weight:700"></div><div id="presetDesc" style="opacity:.8;font-size:10px;margin-top:1px"></div></div>
+  </div>
+</div>
+
+<!-- WORKSPACE -->
+<div class="ws">
+
+<!-- LEFT: INPUTS -->
+<div class="lp">
+
+  <!-- 核心字段（始终可见） -->
+  <div class="card">
+    <div class="ct"><div class="ico" style="background:#e6faf2">📦</div>核心参数</div>
+    <div class="cb">
+      <div class="fg">
+        <div class="field">
+          <label>Ozon售价（₽）</label>
+          <div class="iw"><input type="number" id="salePrice" class="hu" value="2000" min="0" oninput="calculate()"><span class="unit">₽</span></div>
+        </div>
+        <div class="field">
+          <label>商品货值（₽/件）<span class="hint">工厂出货价</span></label>
+          <div class="iw"><input type="number" id="goodsValue" class="hu" value="600" min="0" oninput="calculate()"><span class="unit">₽</span></div>
+        </div>
+        <div class="field">
+          <label>头程运费分摊（₽/件）</label>
+          <div class="iw"><input type="number" id="firstMile" class="hu" value="200" min="0" oninput="calculate()"><span class="unit">₽</span></div>
+        </div>
+        <div class="field">
+          <label>清关费用（₽/件）<span class="hint">海关关税+清关服务费</span></label>
+          <div class="iw"><input type="number" id="customsFee" class="hu" value="0" min="0" oninput="calculate()"><span class="unit">₽</span></div>
+        </div>
+        <div class="field">
+          <label>商品类目</label>
+          <select id="category" onchange="updateCommission()">
+            <option value="12">家居日用品 — 12%</option>
+            <option value="45">服装鞋帽(1500~5000₽) — 45%</option>
+            <option value="9" selected>电子数码 — 9%</option>
+            <option value="15">美妆个护 — 15%</option>
+            <option value="42">书籍文具 — 42%</option>
+            <option value="12b">运动户外 — 12%</option>
+            <option value="47">儿童玩具/服装 — 47%</option>
+            <option value="10">宠物用品 — 10%</option>
+            <option value="5">食品饮料 — 5%</option>
+            <option value="9b">汽车用品 — 9%</option>
+            <option value="55">个人卫生用品 — 55%</option>
+            <option value="20">100~300₽低价品 — 20%</option>
+            <option value="14">100₽以下 — 14%</option>
+            <option value="0">自定义</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>平台佣金率</label>
+          <div class="iw"><input type="number" id="commissionRate" class="hu" value="9" min="0" max="60" step=".5" oninput="calculate()"><span class="unit">%</span></div>
+        </div>
+        <div class="field">
+          <label>月销量（件）</label>
+          <input type="number" id="monthlyQty" value="100" min="1" oninput="calculate()">
+        </div>
+      </div>
+      <div class="field" style="margin-top:4px">
+        <label>发货模式</label>
+        <select id="fulfillMode" onchange="toggleFulfill()">
+          <option value="fbo">FBO — 备货到Ozon仓库发货</option>
+          <option value="fbs">FBS — 接单后交Ozon分拣</option>
+          <option value="rfbs">rFBS — 接单后直寄买家</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- 税务制度（折叠） -->
+  <div class="card">
+    <div class="ct collapsible-hd" onclick="toggleSection('taxBody','taxArrow')">
+      <div class="ico" style="background:#e8f0ff">📋</div>
+      税务制度
+      <span style="margin-left:6px;font-size:10px;color:var(--blue);font-weight:400" id="taxModeLabel">ОСНО</span>
+      <span id="taxArrow" style="margin-left:auto;font-size:10px;color:var(--t4)">▶</span>
+    </div>
+    <div class="collapsible-body cb" id="taxBody">
+      <div class="tax-tabs" id="taxTabs">
+        <div class="tax-tab" data-tax="usn6" onclick="selectTax(this)">УСН 6%<span class="sub">营业额×6%</span></div>
+        <div class="tax-tab" data-tax="usn15" onclick="selectTax(this)">УСН 15%<span class="sub">（收入−支出）×15%</span></div>
+        <div class="tax-tab active" data-tax="osno" onclick="selectTax(this)">ОСНО<span class="sub">增值税22%+所得税25%</span></div>
+        <div class="tax-tab" data-tax="ausn8" onclick="selectTax(this)">АУСН 8%<span class="sub">营业额×8%</span></div>
+        <div class="tax-tab" data-tax="ausn20" onclick="selectTax(this)">АУСН 20%<span class="sub">（收入−支出）×20%</span></div>
+        <div class="tax-tab" data-tax="patent" onclick="selectTax(this)">Патент<span class="sub">固定年费·仅ИП</span></div>
+      </div>
+      <div class="tax-info" id="taxInfoBar">
+        <div class="ti-item"><div class="ti-l">计税方式</div><div class="ti-v" id="ti-type">增值税22%+所得税25%</div></div>
+        <div class="ti-item"><div class="ti-l">НДС要求</div><div class="ti-v" id="ti-vat">必须缴22%</div></div>
+        <div class="ti-item"><div class="ti-l">适用主体</div><div class="ti-v" id="ti-entity">ООО/ИП</div></div>
+      </div>
+      <div id="patentRow" style="display:none">
+        <div class="field"><label>年专利费（卢布）</label><div class="iw"><input type="number" id="patentAnnual" value="60000" min="0" oninput="calculate()"><span class="unit">₽/年</span></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 高级设置（折叠） -->
+  <div class="card">
+    <div class="ct collapsible-hd" onclick="toggleSection('advBody','advArrow')">
+      <div class="ico" style="background:#fff3eb">⚙️</div>
+      高级设置
+      <span style="margin-left:6px;font-size:10px;color:var(--t4);font-weight:400">退货率、仓储、广告等</span>
+      <span id="advArrow" style="margin-left:auto;font-size:10px;color:var(--t4)">▶</span>
+    </div>
+    <div class="collapsible-body cb" id="advBody">
+      <div class="sdiv">退货设置</div>
+      <div class="fg3">
+        <div class="field">
+          <label>退货率</label>
+          <div class="iw"><input type="number" id="returnRate" class="hu" value="5" min="0" max="80" step=".5" oninput="calculate()"><span class="unit">%</span></div>
+        </div>
+        <div class="field">
+          <label>退货损耗率</label>
+          <div class="iw"><input type="number" id="returnDamageRate" class="hu" value="30" min="0" max="100" step="5" oninput="calculate()"><span class="unit">%</span></div>
+        </div>
+        <div class="field">
+          <label>退货物流费/件</label>
+          <div class="iw"><input type="number" id="returnLogistic" class="hu" value="60" min="0" oninput="calculate()"><span class="unit">₽</span></div>
+        </div>
+      </div>
+      <div class="sdiv">物流费用</div>
+      <div id="fboFields">
+        <div class="fg">
+          <div class="field"><label>仓储费/天/件</label><div class="iw"><input type="number" id="fboStorage" class="hu" value=".12" step=".01" min="0" oninput="calculate()"><span class="unit">₽</span></div></div>
+          <div class="field"><label>平均库存天数</label><div class="iw"><input type="number" id="storageDays" class="hu" value="30" min="1" oninput="calculate()"><span class="unit">天</span></div></div>
+          <div class="field"><label>拣货打包费/件</label><div class="iw"><input type="number" id="fboPick" class="hu" value="25" min="0" oninput="calculate()"><span class="unit">₽</span></div></div>
+          <div class="field"><label>最后一公里配送</label><div class="iw"><input type="number" id="fboLastMile" class="hu" value="60" min="0" oninput="calculate()"><span class="unit">₽</span></div></div>
+        </div>
+      </div>
+      <div id="fbsFields" style="display:none">
+        <div class="fg">
+          <div class="field"><label>FBS物流费/件</label><div class="iw"><input type="number" id="fbsLogistic" class="hu" value="120" min="0" oninput="calculate()"><span class="unit">₽</span></div></div>
+          <div class="field"><label>FBS处理费/件</label><div class="iw"><input type="number" id="fbsHandling" class="hu" value="25" min="0" oninput="calculate()"><span class="unit">₽</span></div></div>
+        </div>
+      </div>
+      <div id="rfbsFields" style="display:none">
+        <div class="field"><label>快递配送费/件</label><div class="iw"><input type="number" id="rfbsLogistic" class="hu" value="180" min="0" oninput="calculate()"><span class="unit">₽</span></div></div>
+      </div>
+      <div class="sdiv">运营费用</div>
+      <div class="fg">
+        <div class="field"><label>收单手续费率</label><div class="iw"><input type="number" id="acquiringRate" class="hu" value="1.5" min="0" max="5" step=".1" oninput="calculate()"><span class="unit">%</span></div></div>
+        <div class="field"><label>广告推广费/月</label><div class="iw"><input type="number" id="adCost" class="hu" value="5000" min="0" oninput="calculate()"><span class="unit">₽</span></div></div>
+        <div class="field"><label>其他杂费/月</label><div class="iw"><input type="number" id="otherCost" class="hu" value="2000" min="0" oninput="calculate()"><span class="unit">₽</span></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="share-row">
+    <button class="calc-btn" onclick="calculate()">重新计算</button>
+    <button class="share-btn" onclick="copyLink()" title="复制含参数的分享链接">🔗 复制链接</button>
+  </div>
+
+  <!-- 政策说明 -->
+  <div class="policy-box">
+    <div class="policy-hd" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='block'?'none':'block'">
+      📋 税务政策 & Ozon佣金（2026~2028预期）▼
+    </div>
+    <div class="policy-body">
+      <div class="policy-item"><span>🔴</span><div><span class="policy-year">2026</span>НДС基础税率升至<strong>22%</strong>，ОСНО全面适用；УСН免НДС门槛降至<strong>2000万₽</strong></div></div>
+      <div class="policy-item"><span>🟡</span><div><span class="policy-year">2027</span>УСН免НДС门槛进一步降至<strong>1500万₽</strong></div></div>
+      <div class="policy-item"><span>🟠</span><div><span class="policy-year">2028</span>НДС门槛最终降至<strong>1000万₽</strong></div></div>
+      <div class="policy-item"><span>📊</span><div><span class="policy-year">2026</span>企业所得税维持<strong>25%</strong>；УСН统一6%或15%</div></div>
+      <div class="policy-item"><span>🏪</span><div><span class="policy-year">2026.04</span>Ozon服装佣金涨至<strong>45~47%</strong>，卫生用品<strong>55%</strong>，书籍<strong>42%</strong></div></div>
+      <div class="policy-item"><span>✅</span><div><span class="policy-year">稳定</span>食品<strong>5%</strong>、数码<strong>9%</strong>、宠物<strong>10%</strong>、家居<strong>12%</strong>相对稳定</div></div>
+    </div>
+  </div>
+
+</div><!-- /lp -->
+
+<!-- RIGHT: RESULTS -->
+<div class="rp">
+  <div class="rtab-bar">
+    <button class="rtab active" data-tab="pnl" onclick="switchTab('pnl')">💸 损益明细</button>
+    <button class="rtab" data-tab="pricing" onclick="switchTab('pricing')">🎯 定价反推</button>
+    <button class="rtab" data-tab="batch" onclick="switchTab('batch')">📦 批次规划</button>
+  </div>
+
+  <!-- TAB 1: P&L -->
+  <div class="rp-content" data-panel="pnl">
+    <!-- P&L Table -->
+    <div class="card">
+      <div class="ct"><div class="ico" style="background:#fff3eb">💸</div>完整成本拆解（单件均摊，税后）<span style="margin-left:auto;font-size:10px;color:var(--t4)" id="pnl-tax-mode">ОСНО</span></div>
+      <div class="pnl-wrap">
+        <table class="pnl" id="pnlTable">
+          <thead>
+            <tr>
+              <th id="pnl-col-name" style="text-align:left">费用项目<span class="col-resize" data-col="0"></span></th>
+              <th id="pnl-col-amt" style="text-align:right">金额<span class="col-resize" data-col="1"></span></th>
+              <th id="pnl-col-pct" style="text-align:right">占比</th>
+            </tr>
+          </thead>
+          <tbody id="pnlBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Monthly Summary -->
+    <div class="card">
+      <div class="ct"><div class="ico" style="background:#e6faf2">📅</div>月度经营数据</div>
+      <div class="cb">
+        <div class="mg">
+          <div class="mg-item"><div class="ml">月销售额</div><div class="mv" id="m-revenue">0</div><div class="mu">卢布</div></div>
+          <div class="mg-item"><div class="ml">月净利润</div><div class="mv" id="m-profit" style="color:var(--green)">0</div><div class="mu">卢布</div></div>
+          <div class="mg-item"><div class="ml">月税费合计</div><div class="mv" id="m-tax" style="color:var(--orange)">0</div><div class="mu">卢布</div></div>
+          <div class="mg-item"><div class="ml">实际成交件</div><div class="mv" id="m-sold">0</div><div class="mu">件（扣退货）</div></div>
+          <div class="mg-item"><div class="ml">退货件数</div><div class="mv" id="m-returns">0</div><div class="mu">件</div></div>
+          <div class="mg-item"><div class="ml">年收入预估</div><div class="mv" id="y-revenue">0</div><div class="mu">卢布</div></div>
+        </div>
+        <div class="vat-warn" id="vatWarning" style="margin-top:8px">
+          <span>🚨</span><span id="vatWarningText"></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Breakeven -->
+    <div class="card">
+      <div class="ct"><div class="ico" style="background:#e8f0ff">⚖️</div>盈亏平衡分析</div>
+      <div class="cb">
+        <div class="be-row">
+          <div class="be-item"><div class="bl">盈亏平衡售价<br><span style="font-size:10px;color:var(--t4)">低于此价则亏损</span></div><div class="bv" id="breakevenPrice">0 ₽</div></div>
+          <div class="be-item"><div class="bl">月盈亏平衡销量<br><span style="font-size:10px;color:var(--t4)">覆盖固定成本</span></div><div class="bv" id="breakevenQty">0 件</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sensitivity Analysis -->
+    <div class="card">
+      <div class="ct"><div class="ico" style="background:#f3e8ff">📊</div>敏感性分析</div>
+      <div class="cb">
+        <div class="sdiv">售价变动影响</div>
+        <table class="sens-table" id="sensPriceTable">
+          <thead>
+            <tr>
+              <th style="text-align:left">售价变动</th>
+              <th>售价</th>
+              <th>净利润/件</th>
+              <th>利润率</th>
+              <th>月净利润</th>
+            </tr>
+          </thead>
+          <tbody id="sensPriceBody"></tbody>
+        </table>
+        <div class="sdiv" style="margin-top:8px">货值变动影响</div>
+        <table class="sens-table" id="sensGoodsTable">
+          <thead>
+            <tr>
+              <th style="text-align:left">货值变动</th>
+              <th>货值</th>
+              <th>净利润/件</th>
+              <th>利润率</th>
+              <th>月净利润</th>
+            </tr>
+          </thead>
+          <tbody id="sensGoodsBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 2: PRICING -->
+  <div class="rp-content" data-panel="pricing" style="display:none">
+    <div class="card">
+      <div class="ct"><div class="ico" style="background:#fff3eb">🎯</div>目标利润率 → 反推建议售价</div>
+      <div class="cb">
+        <div class="fg" style="align-items:end;gap:10px">
+          <div class="field">
+            <label>目标净利润率（税后利润/售价）</label>
+            <div class="iw"><input type="number" id="targetMargin" class="hu" value="20" min="1" max="60" step="1" oninput="updatePricing()"><span class="unit">%</span></div>
+          </div>
+          <div style="padding-bottom:2px">
+            <div style="font-size:10px;color:var(--t4);margin-bottom:3px">基于当前参数（货值+头程+佣金+税务）</div>
+            <div style="font-size:11px;color:var(--t3)">↓ 下方自动计算</div>
+          </div>
+        </div>
+        <div id="pricingResult" style="margin-top:12px;background:linear-gradient(90deg,#0a1f5c,#005bff);border-radius:8px;padding:14px 16px;color:#fff">
+          <div style="font-size:11px;opacity:.8">达到目标利润率所需售价</div>
+          <div style="font-size:30px;font-weight:900;margin:4px 0" id="suggestedPrice">— ₽</div>
+          <div style="font-size:11px;opacity:.75" id="suggestedPriceNote"></div>
+        </div>
+        <div class="sdiv" style="margin-top:14px">利润率梯度对照表</div>
+        <table style="width:100%;border-collapse:collapse;font-size:12px" id="marginMatrix">
+          <thead>
+            <tr style="background:var(--bg)">
+              <th style="padding:6px 8px;text-align:left;font-size:10px;color:var(--t3);font-weight:600;border-bottom:1px solid var(--b1)">目标利润率</th>
+              <th style="padding:6px 8px;text-align:right;font-size:10px;color:var(--t3);font-weight:600;border-bottom:1px solid var(--b1)">建议售价</th>
+              <th style="padding:6px 8px;text-align:right;font-size:10px;color:var(--t3);font-weight:600;border-bottom:1px solid var(--b1)">单件净利</th>
+              <th style="padding:6px 8px;text-align:right;font-size:10px;color:var(--t3);font-weight:600;border-bottom:1px solid var(--b1)">月利润</th>
+            </tr>
+          </thead>
+          <tbody id="marginMatrixBody"></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="card">
+      <div class="ct"><div class="ico" style="background:#e6faf2">💡</div>定价策略分析</div>
+      <div class="cb" id="pricingAdvice" style="font-size:12px;color:var(--t2);line-height:1.7"></div>
+    </div>
+  </div>
+
+  <!-- TAB 3: BATCH -->
+  <div class="rp-content" data-panel="batch" style="display:none">
+    <div class="card">
+      <div class="ct"><div class="ico" style="background:#e8f0ff">📦</div>批次规划参数</div>
+      <div class="cb">
+        <div class="fg">
+          <div class="field">
+            <label>总可用资金（万元人民币）</label>
+            <div class="iw"><input type="number" id="totalCapital" class="hu" value="500" min="10" step="10" oninput="updateBatch()"><span class="unit">万¥</span></div>
+          </div>
+          <div class="field">
+            <label>汇率（₽/¥）</label>
+            <div class="iw"><input type="number" id="exchangeRate" class="hu" value="12.5" min="1" step=".5" oninput="updateBatch()"><span class="unit">₽/¥</span></div>
+            <span style="font-size:10px;color:var(--t4);margin-top:2px">参考汇率：1¥ ≈ 12~13₽（2026年）</span>
+          </div>
+          <div class="field">
+            <label>单件总成本（人民币）</label>
+            <div class="iw"><input type="number" id="unitCostRmb" class="hu" value="64" min="1" step="1" oninput="updateBatch()"><span class="unit">¥/件</span></div>
+          </div>
+          <div class="field">
+            <label>第一批测品预算比例</label>
+            <div class="iw"><input type="number" id="testRatio" class="hu" value="8" min="3" max="20" step="1" oninput="updateBatch()"><span class="unit">%</span></div>
+          </div>
+        </div>
+        <div style="margin-top:8px;background:var(--blue-l);border-radius:6px;padding:8px 10px;font-size:11px;color:var(--blue)">
+          💡 货值+头程已从计算器自动换算。如需修改直接覆盖上方数字。
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="ct"><div class="ico" style="background:#e6faf2">📋</div>分阶段部署方案</div>
+      <div class="cb" id="batchPlan"></div>
+    </div>
+    <div class="card">
+      <div class="ct"><div class="ico" style="background:#fff3eb">📊</div>测品期关键监控指标</div>
+      <div class="cb" id="batchMetrics"></div>
+    </div>
+  </div>
+
+</div><!-- /rp -->
+</div><!-- /ws -->
+
+<script>
+let currentTax = 'osno'
+let _vatPayable = 0, _incomeTax = 0
+
+const TAX_CONFIG = {
+  usn6:   { label:'营业额×6%', vat:'年收入<2000万免НДС', entity:'ООО/ИП', desc:'УСН 6%' },
+  usn15:  { label:'(收入-支出)×15%', vat:'年收入<2000万免НДС', entity:'ООО/ИП', desc:'УСН 15%' },
+  osno:   { label:'НДС 22%+所得税25%', vat:'必须缴НДС 22%', entity:'ООО/ИП', desc:'ОСНО' },
+  ausn8:  { label:'营业额×8%', vat:'无需缴НДС', entity:'ООО/ИП(≤5人)', desc:'АУСН 8%' },
+  ausn20: { label:'(收入-支出)×20%', vat:'无需缴НДС', entity:'ООО/ИП(≤5人)', desc:'АУСН 20%' },
+  patent: { label:'固定年费', vat:'无需缴НДС', entity:'仅ИП', desc:'Патент' },
+}
+
+const fmt = n => n.toLocaleString('ru-RU',{minimumFractionDigits:2,maximumFractionDigits:2})
+const fmtI = n => Math.round(n).toLocaleString('ru-RU')
+const g = id => parseFloat(document.getElementById(id).value) || 0
+
+// ── Collapsible sections ──
+const toggleSection = (bodyId, arrowId) => {
+  const body = document.getElementById(bodyId)
+  const arrow = document.getElementById(arrowId)
+  const isOpen = body.classList.contains('open')
+  body.classList.toggle('open', !isOpen)
+  if (arrow) arrow.textContent = isOpen ? '▶' : '▼'
+}
+
+// ── Tax selection ──
+const selectTax = el => {
+  document.querySelectorAll('.tax-tab').forEach(t => t.classList.remove('active'))
+  el.classList.add('active')
+  currentTax = el.dataset.tax
+  const c = TAX_CONFIG[currentTax]
+  document.getElementById('ti-type').textContent = c.label
+  document.getElementById('ti-vat').textContent = c.vat
+  document.getElementById('ti-entity').textContent = c.entity
+  document.getElementById('patentRow').style.display = currentTax === 'patent' ? 'block' : 'none'
+  document.getElementById('taxModeLabel').textContent = c.desc
+  calculate()
+}
+
+const updateCommission = () => {
+  const cat = document.getElementById('category')
+  const val = cat.options[cat.selectedIndex].value
+  // strip trailing 'b' suffix used to deduplicate option values
+  const numVal = parseFloat(val)
+  if (!isNaN(numVal) && numVal > 0) document.getElementById('commissionRate').value = numVal
+  calculate()
+}
+
+const toggleFulfill = () => {
+  const mode = document.getElementById('fulfillMode').value
+  document.getElementById('fboFields').style.display = mode === 'fbo' ? 'block' : 'none'
+  document.getElementById('fbsFields').style.display = mode === 'fbs' ? 'block' : 'none'
+  document.getElementById('rfbsFields').style.display = mode === 'rfbs' ? 'block' : 'none'
+  calculate()
+}
+
+// ── Core calculation ──
+const calculate = () => {
+  const salePrice = g('salePrice')
+  const goodsValue = g('goodsValue')
+  const firstMile = g('firstMile')
+  const customsFee = g('customsFee')
+  const costPrice = goodsValue + firstMile + customsFee
+  const commRate = g('commissionRate') / 100
+  const monthlyQty = g('monthlyQty') || 1
+  const returnRate = g('returnRate') / 100
+  const returnDamageRate = g('returnDamageRate') / 100
+  const acquiringRate = g('acquiringRate') / 100
+  const adCost = g('adCost')
+  const otherCost = g('otherCost')
+  const patentAnnual = g('patentAnnual')
+  const mode = document.getElementById('fulfillMode').value
+
+  let logisticFee = 0
+  if (mode === 'fbo') logisticFee = g('fboStorage') * g('storageDays') + g('fboPick') + g('fboLastMile')
+  else if (mode === 'fbs') logisticFee = g('fbsLogistic') + g('fbsHandling')
+  else logisticFee = g('rfbsLogistic')
+
+  const returnOrders = monthlyQty * returnRate
+  const soldOrders = monthlyQty - returnOrders
+  const effectiveSold = Math.max(soldOrders, 1)
+
+  const monthlyRevenue = soldOrders * salePrice
+  const monthlyComm = monthlyQty * salePrice * commRate
+  const monthlyAcquiring = monthlyRevenue * acquiringRate
+  const monthlyLogistic = monthlyQty * logisticFee
+  const monthlyReturnLogistic = returnOrders * g('returnLogistic')
+  const monthlyDamageLoss = returnOrders * returnDamageRate * costPrice
+  const monthlyCostGoods = soldOrders * costPrice + monthlyDamageLoss
+  const monthlyTotalCost = monthlyComm + monthlyAcquiring + monthlyLogistic + monthlyReturnLogistic + monthlyCostGoods + adCost + otherCost
+
+  let monthlyTax = 0
+  _vatPayable = 0; _incomeTax = 0
+
+  if (currentTax === 'usn6') {
+    monthlyTax = monthlyRevenue * 0.06
+  } else if (currentTax === 'usn15') {
+    const base = Math.max(monthlyRevenue - monthlyTotalCost, 0)
+    monthlyTax = Math.max(base * 0.15, monthlyRevenue * 0.01)
+  } else if (currentTax === 'osno') {
+    const vatOut = monthlyRevenue * (22/122)
+    const vatInBase = monthlyCostGoods + monthlyComm + monthlyLogistic + monthlyReturnLogistic + adCost
+    const vatIn = vatInBase * (22/122)
+    _vatPayable = Math.max(vatOut - vatIn, 0)
+    const revEx = monthlyRevenue * (100/122)
+    const expEx = vatInBase * (100/122) + monthlyAcquiring + otherCost
+    _incomeTax = Math.max(revEx - expEx, 0) * 0.25
+    monthlyTax = _vatPayable + _incomeTax
+  } else if (currentTax === 'ausn8') {
+    monthlyTax = monthlyRevenue * 0.08
+  } else if (currentTax === 'ausn20') {
+    const base = Math.max(monthlyRevenue - monthlyTotalCost, 0)
+    monthlyTax = Math.max(base * 0.20, monthlyRevenue * 0.03)
+  } else if (currentTax === 'patent') {
+    monthlyTax = patentAnnual / 12
+  }
+
+  const monthlyNetProfit = monthlyRevenue - monthlyTotalCost - monthlyTax
+  const pu = v => v / effectiveSold
+
+  const perRevenue = salePrice
+  const perComm = pu(monthlyComm)
+  const perAcquiring = pu(monthlyAcquiring)
+  const perLogistic = pu(monthlyLogistic)
+  const perReturnLogistic = pu(monthlyReturnLogistic)
+  const perDamage = pu(monthlyDamageLoss)
+  const perAd = pu(adCost)
+  const perOther = pu(otherCost)
+  const perTax = pu(monthlyTax)
+  const perVat = pu(_vatPayable)
+  const perIT = pu(_incomeTax)
+  const perNetProfit = pu(monthlyNetProfit)
+  const margin = salePrice > 0 ? perNetProfit / salePrice * 100 : 0
+  const roi = costPrice > 0 ? perNetProfit / costPrice * 100 : 0
+
+  // Hero bar
+  const npEl = document.getElementById('netProfitPerUnit')
+  npEl.textContent = `${perNetProfit >= 0 ? '' : '-'}${fmt(Math.abs(perNetProfit))} ₽`
+  npEl.className = 'profit-main-num' + (perNetProfit < 0 ? ' neg' : '')
+  document.getElementById('kpi-margin').textContent = margin.toFixed(1) + '%'
+  document.getElementById('kpi-roi').textContent = roi.toFixed(1) + '%'
+  document.getElementById('kpi-monthly').textContent = fmtI(monthlyNetProfit) + ' ₽'
+  document.getElementById('kpi-tax').textContent = fmt(perTax) + ' ₽'
+
+  // Monthly
+  document.getElementById('m-revenue').textContent = fmtI(monthlyRevenue)
+  document.getElementById('m-profit').textContent = fmtI(monthlyNetProfit)
+  document.getElementById('m-tax').textContent = fmtI(monthlyTax)
+  document.getElementById('m-sold').textContent = fmtI(soldOrders)
+  document.getElementById('m-returns').textContent = fmtI(returnOrders)
+  document.getElementById('y-revenue').textContent = fmtI(monthlyRevenue * 12)
+
+  // VAT warning
+  const annRev = monthlyRevenue * 12
+  const vw = document.getElementById('vatWarning')
+  if ((currentTax === 'usn6' || currentTax === 'usn15') && annRev >= 20000000) {
+    vw.style.display = 'flex'
+    const vt = document.getElementById('vatWarningText')
+    if (annRev < 272500000) vt.innerHTML = `年收入预估 <strong>${fmtI(annRev)} ₽</strong>，超过2000万门槛，须缴НДС <strong>5%</strong>（2026）`
+    else if (annRev < 490500000) vt.innerHTML = `年收入预估 <strong>${fmtI(annRev)} ₽</strong>，超2.725亿，适用НДС <strong>7%</strong>`
+    else vt.innerHTML = `年收入预估 <strong>${fmtI(annRev)} ₽</strong>，超4.905亿，<strong style="color:var(--red)">丧失УСН资格</strong>，须缴НДС <strong>22%</strong>`
+  } else { vw.style.display = 'none' }
+
+  // P&L table
+  const pct = v => salePrice > 0 ? (v/salePrice*100).toFixed(1)+'%' : '0.0%'
+  const row = (name, val, color, dot) =>
+    `<tr class="item"><td class="name"><span class="dot" style="background:${dot}"></span>${name}</td><td class="amt" style="color:${color}">-${fmt(Math.abs(val))} ₽</td><td class="pct">${pct(val)}</td></tr>`
+  const grp = title => `<tr class="pnl-group"><td colspan="3">${title}</td></tr>`
+
+  const taxRows = currentTax === 'osno'
+    ? row('增值税 НДС 22%（销项−进项净额）', perVat, '#e67e22', '#e67e22') +
+      row('企业所得税 25%', perIT, '#d35400', '#d35400')
+    : row(TAX_CONFIG[currentTax].desc, perTax, '#e67e22', '#e67e22')
+
+  document.getElementById('pnlBody').innerHTML = `
+    <tr class="revenue"><td class="name" style="font-weight:700">单件售价</td><td class="amt" style="color:var(--blue)">${fmt(perRevenue)} ₽</td><td class="pct">100.0%</td></tr>
+    ${grp('平台费用')}
+    ${row('Ozon 平台佣金', perComm, '#005bff', '#005bff')}
+    ${row('收单手续费 Эквайринг（免НДС）', perAcquiring, '#7c3aed', '#7c3aed')}
+    ${grp('物流费用')}
+    ${row('配送物流费', perLogistic, '#d97706', '#d97706')}
+    ${row('退货物流分摊', perReturnLogistic, '#f59e0b', '#f59e0b')}
+    ${grp('商品成本（含头程）')}
+    ${row('货值（工厂出货价）', goodsValue, '#6b7280', '#9ca3af')}
+    ${row('头程运费分摊', firstMile, '#374151', '#6b7280')}
+    ${row('清关费用（关税+清关服务）', customsFee, '#4b5563', '#4b5563')}
+    ${row('退货损耗分摊', perDamage, '#dc2626', '#dc2626')}
+    ${grp('运营费用')}
+    ${row('广告推广分摊', perAd, '#0891b2', '#0891b2')}
+    ${row('其他杂费分摊', perOther, '#64748b', '#94a3b8')}
+    ${grp('税务（' + TAX_CONFIG[currentTax].desc + '）')}
+    ${taxRows}
+    <tr class="total-row">
+      <td class="name" style="color:${perNetProfit>=0?'var(--green)':'var(--red)'}">▶ 净利润（税后）</td>
+      <td class="amt" style="color:${perNetProfit>=0?'var(--green)':'var(--red)'}">${perNetProfit>=0?'+':''}${fmt(perNetProfit)} ₽</td>
+      <td class="pct" style="color:${perNetProfit>=0?'var(--green)':'var(--red)'};font-weight:700">${margin.toFixed(1)}%</td>
+    </tr>`
+  document.getElementById('pnl-tax-mode').textContent = TAX_CONFIG[currentTax].desc
+
+  // Breakeven
+  const perRL = pu(monthlyReturnLogistic)
+  const fixedPU = perRL + perDamage + perAd + perOther
+  let breakeven = 0
+  const nr = 1 - commRate - acquiringRate - 0.06
+  if (nr > 0) breakeven = (costPrice + perLogistic + fixedPU) / nr
+  const fixedM = adCost + otherCost + (currentTax === 'patent' ? patentAnnual/12 : 0)
+  const contrib = perNetProfit + perAd + perOther
+  const beQty = contrib > 0 ? Math.ceil(fixedM / contrib) : 0
+  document.getElementById('breakevenPrice').textContent = `${fmt(Math.max(breakeven,0))} ₽`
+  document.getElementById('breakevenQty').textContent = `${fmtI(beQty)} 件`
+
+  // Sensitivity analysis
+  updateSensitivity(salePrice, goodsValue, monthlyQty, returnRate)
+
+  // Save to localStorage
+  saveState()
+
+  // Sync active tabs
+  if (document.querySelector('.rtab[data-tab="pricing"]')?.classList.contains('active')) updatePricing()
+  if (document.querySelector('.rtab[data-tab="batch"]')?.classList.contains('active')) { syncBatchUnitCost(); updateBatch() }
+}
+
+// ── Sensitivity Analysis ──
+const updateSensitivity = (basePrice, baseGoods, monthlyQty, returnRate) => {
+  const levels = [-20, -10, 0, 10, 20]
+  const rR = returnRate
+
+  // Price sensitivity
+  const priceRows = levels.map(pct => {
+    const p = basePrice * (1 + pct/100)
+    const { net, margin } = calcUnitNet(p)
+    const monthlyNet = net * monthlyQty * (1 - rR)
+    const isBase = pct === 0
+    const cls = isBase ? 'base' : ''
+    const netCls = net >= 0 ? 'sens-pos' : 'sens-neg'
+    const label = pct === 0 ? '基准（当前）' : (pct > 0 ? `+${pct}%` : `${pct}%`)
+    return `<tr class="${cls}">
+      <td>${label}</td>
+      <td>${fmt(p)} ₽</td>
+      <td class="${netCls}">${fmt(net)} ₽</td>
+      <td class="${netCls}">${margin.toFixed(1)}%</td>
+      <td class="${netCls}">${fmtI(monthlyNet)} ₽</td>
+    </tr>`
+  }).join('')
+  document.getElementById('sensPriceBody').innerHTML = priceRows
+
+  // Goods value sensitivity
+  const goodsRows = levels.map(pct => {
+    const gv = baseGoods * (1 + pct/100)
+    const { net, margin } = calcUnitNet(basePrice, { goodsValueOverride: gv })
+    const monthlyNet = net * monthlyQty * (1 - rR)
+    const isBase = pct === 0
+    const cls = isBase ? 'base' : ''
+    const netCls = net >= 0 ? 'sens-pos' : 'sens-neg'
+    const label = pct === 0 ? '基准（当前）' : (pct > 0 ? `+${pct}%` : `${pct}%`)
+    return `<tr class="${cls}">
+      <td>${label}</td>
+      <td>${fmt(gv)} ₽</td>
+      <td class="${netCls}">${fmt(net)} ₽</td>
+      <td class="${netCls}">${margin.toFixed(1)}%</td>
+      <td class="${netCls}">${fmtI(monthlyNet)} ₽</td>
+    </tr>`
+  }).join('')
+  document.getElementById('sensGoodsBody').innerHTML = goodsRows
+}
+
+// ── Unit net profit calculator (supports overrides) ──
+const calcUnitNet = (P, override = {}) => {
+  const gv = override.goodsValueOverride !== undefined ? override.goodsValueOverride : g('goodsValue')
+  const cP = gv + g('firstMile') + g('customsFee')
+  const cR = (override.commRate !== undefined ? override.commRate : g('commissionRate')) / 100
+  const aR = g('acquiringRate') / 100
+  const mode = document.getElementById('fulfillMode').value
+  let lF = 0
+  if (mode === 'fbo') lF = g('fboStorage') * g('storageDays') + g('fboPick') + g('fboLastMile')
+  else if (mode === 'fbs') lF = g('fbsLogistic') + g('fbsHandling')
+  else lF = g('rfbsLogistic')
+  const rR = g('returnRate') / 100
+  const dR = g('returnDamageRate') / 100
+  const rL = g('returnLogistic')
+  const mQ = g('monthlyQty') || 100
+  const aD = g('adCost') / Math.max(mQ * (1 - rR), 1)
+  const oD = g('otherCost') / Math.max(mQ * (1 - rR), 1)
+
+  const sold = 1 - rR
+  const rev = sold * P
+  const comm = 1 * P * cR
+  const acq = rev * aR
+  const log = 1 * lF
+  const retLog = rR * rL
+  const dmg = rR * dR * cP
+  const cGoods = sold * cP + dmg
+  const totalCost = comm + acq + log + retLog + cGoods + aD + oD
+
+  let tax = 0, vatP = 0, itP = 0
+  const tx = override.tax || currentTax
+  if (tx === 'osno') {
+    const vatOut = rev * 22/122
+    const vatInBase = cGoods + comm + log + retLog + aD
+    vatP = Math.max(vatOut - vatInBase * 22/122, 0)
+    const profBase = Math.max(rev * 100/122 - vatInBase * 100/122 - acq - oD, 0)
+    itP = profBase * 0.25
+    tax = vatP + itP
+  } else if (tx === 'usn6') {
+    tax = rev * 0.06
+  } else if (tx === 'usn15') {
+    tax = Math.max((rev - totalCost) * 0.15, rev * 0.01)
+  } else if (tx === 'ausn8') {
+    tax = rev * 0.08
+  } else if (tx === 'ausn20') {
+    tax = Math.max((rev - totalCost) * 0.20, rev * 0.03)
+  }
+  const net = rev - totalCost - tax
+  return { net, margin: P > 0 ? net / P : 0, tax, vatP, itP }
+}
+
+// ── Binary search: find price for target margin ──
+const findPrice = targetMargin => {
+  const cP = g('goodsValue') + g('firstMile') + g('customsFee')
+  if (cP <= 0) return 0
+  let lo = cP * 0.5, hi = cP * 50
+  for (let i = 0; i < 300; i++) {
+    const mid = (lo + hi) / 2
+    const { margin } = calcUnitNet(mid)
+    if (Math.abs(margin - targetMargin) < 0.00005) break
+    if (margin < targetMargin) lo = mid; else hi = mid
+  }
+  return (lo + hi) / 2
+}
+
+// ── Pricing tab ──
+const updatePricing = () => {
+  const target = (parseFloat(document.getElementById('targetMargin').value) || 20) / 100
+  const mQ = g('monthlyQty') || 100
+  const rR = g('returnRate') / 100
+  const suggested = findPrice(target)
+  const { net: sugNet } = calcUnitNet(suggested)
+  document.getElementById('suggestedPrice').textContent = suggested > 0 ? fmt(suggested) + ' ₽' : '无法达到'
+  document.getElementById('suggestedPriceNote').textContent = suggested > 0
+    ? `单件净利 ${fmt(sugNet)} ₽ | 月净利 ${fmtI(sugNet * mQ * (1-rR))} ₽（月销${mQ}件）`
+    : '当前成本结构下该利润率不可达，请降低佣金或成本'
+
+  const hi = Math.round(target * 100)
+  const levels = [0, 5, 10, 15, 20, 25, 30, 35, 40]
+  const rows = levels.map(pct => {
+    const p = findPrice(pct / 100)
+    const { net } = calcUnitNet(p)
+    const monthlyNet = net * mQ * (1 - rR)
+    const isTarget = pct === hi
+    const isBE = pct === 0
+    const rowClass = isTarget ? 'highlight' : isBE ? 'breakeven' : ''
+    const label = isBE ? '盈亏平衡（0%）' : `${pct}% 净利率`
+    const color = pct === 0 ? 'var(--red)' : pct < 15 ? 'var(--orange)' : pct < 25 ? 'var(--t1)' : 'var(--green)'
+    return `<tr class="${rowClass}">
+      <td style="color:${color};font-weight:${isTarget?700:400}">${label}${isTarget?' ← 目标':''}</td>
+      <td style="text-align:right;font-weight:${isTarget?700:400}">${p > 0 ? fmt(p)+' ₽' : '—'}</td>
+      <td style="text-align:right;color:${p>0&&net>0?'var(--green)':'var(--red)'}">${p > 0 ? fmt(net)+' ₽' : '—'}</td>
+      <td style="text-align:right;color:${monthlyNet>0?'var(--green)':'var(--red)'}">${p > 0 ? fmtI(monthlyNet)+' ₽' : '—'}</td>
+    </tr>`
+  }).join('')
+  document.getElementById('marginMatrixBody').innerHTML = rows
+
+  const breakeven = findPrice(0)
+  const p20 = findPrice(0.20)
+  const p30 = findPrice(0.30)
+  const current = g('salePrice')
+  const { margin: curMargin, net: curNet } = calcUnitNet(current)
+  let advice = ''
+  if (current < breakeven) {
+    advice = `<div style="background:#fff0ef;border-left:3px solid var(--red);border-radius:0 6px 6px 0;padding:8px 10px;margin-bottom:8px;color:var(--red)">
+      ⚠️ 当前售价 <strong>${fmt(current)} ₽</strong> 低于盈亏平衡线 <strong>${fmt(breakeven)} ₽</strong>，每件亏损 <strong>${fmt(-curNet)} ₽</strong>。必须提价或降低成本。
+    </div>`
+  } else {
+    const pctAboveBE = ((current / breakeven - 1) * 100).toFixed(0)
+    advice = `<div style="background:var(--green-l);border-left:3px solid var(--green);border-radius:0 6px 6px 0;padding:8px 10px;margin-bottom:8px">
+      ✅ 当前售价 <strong>${fmt(current)} ₽</strong>，高于盈亏平衡线 ${pctAboveBE}%，税后利润率 <strong>${(curMargin*100).toFixed(1)}%</strong>。
+    </div>`
+  }
+  advice += `<div style="margin-bottom:6px"><strong>定价三档参考（基于当前成本）：</strong></div>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:10px">
+    <div style="background:var(--bg);border-radius:6px;padding:8px 10px;text-align:center">
+      <div style="font-size:10px;color:var(--t4)">保守定价（10%利润）</div>
+      <div style="font-size:15px;font-weight:700;color:var(--orange)">${fmt(findPrice(0.10))} ₽</div>
+    </div>
+    <div style="background:var(--blue-l);border-radius:6px;padding:8px 10px;text-align:center;border:1px solid #c5d8ff">
+      <div style="font-size:10px;color:var(--blue)">推荐定价（20%利润）</div>
+      <div style="font-size:15px;font-weight:700;color:var(--blue)">${fmt(p20)} ₽</div>
+    </div>
+    <div style="background:var(--green-l);border-radius:6px;padding:8px 10px;text-align:center">
+      <div style="font-size:10px;color:var(--t4)">理想定价（30%利润）</div>
+      <div style="font-size:15px;font-weight:700;color:var(--green)">${fmt(p30)} ₽</div>
+    </div>
+  </div>
+  <div style="font-size:11px;color:var(--t3);line-height:1.8">
+    <strong>选价策略提示：</strong><br>
+    • <strong>新品上架期</strong>：用保守价格（10%利润）冲销量，拿到排名后提价<br>
+    • <strong>稳定运营期</strong>：锁定20%利润率为目标，参考竞品定价微调<br>
+    • <strong>头部卖家优势期</strong>：评价积累后可推至30%，同时参与活动以量补价<br>
+    • <strong>价格保护</strong>：不低于盈亏平衡价的 110%，留出退货和促销缓冲
+  </div>`
+  document.getElementById('pricingAdvice').innerHTML = advice
+}
+
+// ── Batch planning ──
+const syncBatchUnitCost = () => {
+  const rate = parseFloat(document.getElementById('exchangeRate').value) || 12.5
+  const unitRub = g('goodsValue') + g('firstMile') + g('customsFee')
+  const unitRmb = Math.round(unitRub / rate)
+  if (unitRmb > 0) document.getElementById('unitCostRmb').value = unitRmb
+}
+
+const updateBatch = () => {
+  const totalCapWan = parseFloat(document.getElementById('totalCapital').value) || 500
+  const totalCap = totalCapWan * 10000
+  const rate = parseFloat(document.getElementById('exchangeRate').value) || 12.5
+  const unitCostRmb = parseFloat(document.getElementById('unitCostRmb').value) || 64
+  const testRatio = (parseFloat(document.getElementById('testRatio').value) || 8) / 100
+  const netProfit = calcUnitNet(g('salePrice')).net
+  const netProfitRmb = netProfit / rate
+  const mQ = g('monthlyQty') || 100
+  const rR = g('returnRate') / 100
+  const effectiveSales = mQ * (1 - rR)
+  const dailySales = effectiveSales / 30
+
+  const phase1Budget = totalCap * testRatio
+  const minUnitsPerSku = 50
+  const maxSkus = Math.floor(phase1Budget / (minUnitsPerSku * unitCostRmb))
+  const recSkus = Math.min(5, Math.max(1, maxSkus))
+  const salesPerSkuDay = Math.max(dailySales / recSkus, 0.5)
+  const idealUnits = Math.ceil(salesPerSkuDay * 45)
+  const budgetUnits = Math.floor(phase1Budget / recSkus / unitCostRmb)
+  const unitsPerSku1 = Math.max(minUnitsPerSku, Math.min(idealUnits, budgetUnits, 200))
+  const actualBudgetUsed = unitsPerSku1 * recSkus * unitCostRmb
+  const budgetSurplus = phase1Budget - actualBudgetUsed
+  const daysOfStock1 = unitsPerSku1 / salesPerSkuDay
+  const phase1MonthlyNetRmb = netProfitRmb * effectiveSales
+
+  const phase2Budget = totalCap * 0.30
+  const recSkus2 = Math.min(3, recSkus)
+  const unitsPerSku2 = Math.floor(phase2Budget / recSkus2 / unitCostRmb)
+  const daysOfStock2 = unitsPerSku2 / Math.max(dailySales * 0.6, 0.1)
+
+  const phase3Budget = totalCap * 0.45
+  const unitsPerSku3 = Math.floor(phase3Budget / recSkus2 / unitCostRmb)
+  const taxReserve = totalCap * 0.17
+
+  const fmtW = n => (n / 10000).toFixed(1) + '万¥'
+  const fmtD = n => Math.round(n) + '天'
+
+  document.getElementById('batchPlan').innerHTML = `
+    <div style="font-size:11px;color:var(--t3);margin-bottom:10px">
+      总资金 <strong>${totalCapWan}万¥</strong> | 单件成本 <strong>${unitCostRmb}¥</strong> | 汇率 <strong>${rate}₽/¥</strong>
+      <span style="float:right;background:var(--orange-l);color:var(--orange);padding:2px 8px;border-radius:4px;font-weight:700">ОСНО税务预留 ${fmtW(taxReserve)}</span>
+    </div>
+    <div class="phase-card" style="border-left:3px solid var(--orange)">
+      <div class="phase-header">
+        <span class="phase-badge" style="background:var(--orange)">第一阶段</span>
+        <span style="font-weight:700;font-size:13px">测品期</span>
+        <span style="margin-left:auto;font-size:11px;color:var(--t3)">第1~2个月</span>
+      </div>
+      <div class="phase-grid">
+        <div class="phase-metric"><div class="pm">测品预算</div><div class="pv">${fmtW(phase1Budget)}</div></div>
+        <div class="phase-metric"><div class="pm">建议SKU数</div><div class="pv">${recSkus} 个</div></div>
+        <div class="phase-metric"><div class="pm">每SKU备货量</div><div class="pv">${unitsPerSku1} 件</div></div>
+        <div class="phase-metric"><div class="pm">预计库存天数</div><div class="pv">${fmtD(daysOfStock1)}</div></div>
+        <div class="phase-metric"><div class="pm">月净利润预期</div><div class="pv">${fmtW(phase1MonthlyNetRmb)}</div></div>
+        <div class="phase-metric"><div class="pm">剩余备用预算</div><div class="pv">${fmtW(budgetSurplus)}</div></div>
+      </div>
+      <div class="decision-box" style="background:#fff8ec;border:1px solid #ffd48a">
+        <strong>📊 扩量判断标准（第45~60天评估）：</strong><br>
+        ✅ <strong>继续扩量</strong>：月实际销量 ≥ 目标80% + 退货率 ≤ ${(rR*100+3).toFixed(0)}% + 净利润为正<br>
+        🔄 <strong>调整再测</strong>：销量达标但利润不足 → 检查退货率和定价<br>
+        ❌ <strong>停止/换品</strong>：月销量 &lt; 目标50% 连续2周 → 考虑换SKU
+      </div>
+    </div>
+    <div class="phase-card" style="border-left:3px solid var(--blue)">
+      <div class="phase-header">
+        <span class="phase-badge" style="background:var(--blue)">第二阶段</span>
+        <span style="font-weight:700;font-size:13px">扩量期</span>
+        <span style="margin-left:auto;font-size:11px;color:var(--t3)">第3~4个月</span>
+      </div>
+      <div class="phase-grid">
+        <div class="phase-metric"><div class="pm">扩量预算</div><div class="pv">${fmtW(phase2Budget)}</div></div>
+        <div class="phase-metric"><div class="pm">聚焦SKU数</div><div class="pv">${recSkus2} 个</div></div>
+        <div class="phase-metric"><div class="pm">每SKU备货量</div><div class="pv">${unitsPerSku2} 件</div></div>
+        <div class="phase-metric"><div class="pm">预计库存天数</div><div class="pv">${fmtD(daysOfStock2)}</div></div>
+        <div class="phase-metric"><div class="pm">策略</div><div class="pv">砍掉尾部SKU</div></div>
+        <div class="phase-metric"><div class="pm">补货信号</div><div class="pv">库存&lt;15天补</div></div>
+      </div>
+      <div class="decision-box" style="background:var(--blue-l);border:1px solid #c5d8ff">
+        <strong>💡 第二阶段核心动作：</strong><br>
+        • 只保留第一批中销量前 ${recSkus2} 的 SKU，集中资源<br>
+        • 开始投入广告（竞价展位），目标打进类目 Top 50<br>
+        • 建立补货节奏：每30天按销速+安全库存补货<br>
+        • 关注 FBO 跨区域配送附加费（0~8%），考虑多仓布局
+      </div>
+    </div>
+    <div class="phase-card" style="border-left:3px solid var(--green)">
+      <div class="phase-header">
+        <span class="phase-badge" style="background:var(--green)">第三阶段</span>
+        <span style="font-weight:700;font-size:13px">全量稳定期</span>
+        <span style="margin-left:auto;font-size:11px;color:var(--t3)">第5~6个月起</span>
+      </div>
+      <div class="phase-grid">
+        <div class="phase-metric"><div class="pm">全量预算</div><div class="pv">${fmtW(phase3Budget)}</div></div>
+        <div class="phase-metric"><div class="pm">SKU数量</div><div class="pv">${recSkus2} 核心</div></div>
+        <div class="phase-metric"><div class="pm">每SKU备货量</div><div class="pv">${unitsPerSku3} 件</div></div>
+        <div class="phase-metric"><div class="pm">ОСНО税务预留</div><div class="pv">${fmtW(taxReserve)}</div></div>
+        <div class="phase-metric"><div class="pm">季度缴税时间</div><div class="pv">1/4/7/10月</div></div>
+        <div class="phase-metric"><div class="pm">目标月利润</div><div class="pv">${fmtW(phase1MonthlyNetRmb * 2.5)}</div></div>
+      </div>
+      <div class="decision-box" style="background:var(--green-l);border:1px solid #a7f3d0">
+        <strong>🎯 全量期目标：</strong><br>
+        • 资金年周转 4 次（90天一个完整周期：下单→入仓→销售→回款）<br>
+        • 维持库存周转率 &gt; 6次/年（优质FBO排名的核心指标）<br>
+        • ОСНО每季度提前30天备好增值税资金，避免现金流断裂
+      </div>
+    </div>`
+
+  document.getElementById('batchMetrics').innerHTML = `
+    <div class="kpi-row">
+      <div class="kpi-item"><div class="kl">日销量（件/天）</div><div class="kv">${dailySales.toFixed(1)} 件/天</div><div class="kr">基于月销${mQ}件</div></div>
+      <div class="kpi-item"><div class="kl">目标退货率上限</div><div class="kv" style="color:var(--red)">&lt; ${Math.min((rR*100+5).toFixed(0),30)}%</div><div class="kr">超过此值检查产品描述</div></div>
+      <div class="kpi-item"><div class="kl">最低库存预警线</div><div class="kv" style="color:var(--orange)">${Math.ceil(dailySales*15)} 件</div><div class="kr">低于此量立即补货（15天用量）</div></div>
+      <div class="kpi-item"><div class="kl">补货安全库存</div><div class="kv">${Math.ceil(dailySales*45)} 件</div><div class="kr">头程45天 = 在途+安全库存</div></div>
+      <div class="kpi-item"><div class="kl">每月ОСНО税务备款</div><div class="kv" style="color:var(--orange)">${fmtW(totalCap*0.17/12)}</div><div class="kr">季度缴纳，每月预存1/3</div></div>
+      <div class="kpi-item"><div class="kl">单SKU日销量健康值</div><div class="kv">${(dailySales/recSkus).toFixed(1)}+ 件/天</div><div class="kr">低于此值考虑下架或调价</div></div>
+    </div>
+    <div style="margin-top:10px;background:#f0f4ff;border-radius:6px;padding:8px 12px;font-size:11px;color:var(--t2);line-height:1.7">
+      <strong>⚡ 现金流核心提示（ОСНО一般税制）：</strong><br>
+      增值税每季度1月/4月/7月/10月缴纳，金额可能占当季收入的 <strong>8~15%</strong>。
+      FBO回款周期：买家确认收货后提现，通常 <strong>7~14天</strong>。
+      资金压力最大点：入仓备货 + 季度缴税同时发生，需提前 <strong>60天</strong> 备好税款。
+    </div>`
+}
+
+// ── Presets ──
+const PRESETS = {
+  homegoods: {tax:'osno',salePrice:1200,goodsValue:240,firstMile:80,commissionRate:12,monthlyQty:300,returnRate:5,returnDamageRate:20,fulfillMode:'fbo',fboStorage:.10,storageDays:25,fboPick:25,fboLastMile:58,returnLogistic:58,acquiringRate:1.5,adCost:9000,otherCost:3000,label:'家居日用品 — ОСНО标准案例',desc:'1200₽·佣金12%·FBO·月销300件'},
+  clothing:  {tax:'osno',salePrice:2500,goodsValue:450,firstMile:150,commissionRate:45,monthlyQty:200,returnRate:25,returnDamageRate:40,fulfillMode:'fbo',fboStorage:.08,storageDays:20,fboPick:25,fboLastMile:58,returnLogistic:58,acquiringRate:1.5,adCost:15000,otherCost:4000,label:'服装类目 — 高佣金预警案例',desc:'2500₽·佣金45%·退货率25%，利润极度压缩'},
+  electronics:{tax:'osno',salePrice:5000,goodsValue:2400,firstMile:400,commissionRate:9,monthlyQty:80,returnRate:4,returnDamageRate:15,fulfillMode:'fbs',fbsLogistic:120,fbsHandling:25,returnLogistic:70,acquiringRate:1.5,adCost:12000,otherCost:5000,label:'电子数码 — FBS高价案例',desc:'5000₽·佣金9%·FBS商家仓·月销80件'},
+}
+
+const FIELD_IDS = ['salePrice','goodsValue','firstMile','customsFee','commissionRate','monthlyQty','returnRate','returnDamageRate','acquiringRate','adCost','otherCost','returnLogistic','fboStorage','storageDays','fboPick','fboLastMile','fbsLogistic','fbsHandling','rfbsLogistic','patentAnnual','targetMargin','totalCapital','exchangeRate','unitCostRmb','testRatio']
+
+const applyPresetData = p => {
+  document.querySelectorAll('.tax-tab').forEach(t => t.classList.toggle('active', t.dataset.tax === p.tax))
+  currentTax = p.tax
+  const c = TAX_CONFIG[p.tax]
+  document.getElementById('ti-type').textContent = c.label
+  document.getElementById('ti-vat').textContent = c.vat
+  document.getElementById('ti-entity').textContent = c.entity
+  document.getElementById('taxModeLabel').textContent = c.desc
+  document.getElementById('patentRow').style.display = 'none'
+  const s = (id, v) => { const el = document.getElementById(id); if (el && v !== undefined) el.value = v }
+  s('salePrice', p.salePrice); s('goodsValue', p.goodsValue); s('firstMile', p.firstMile)
+  s('commissionRate', p.commissionRate); s('monthlyQty', p.monthlyQty)
+  s('returnRate', p.returnRate); s('returnDamageRate', p.returnDamageRate)
+  s('acquiringRate', p.acquiringRate); s('adCost', p.adCost); s('otherCost', p.otherCost)
+  s('returnLogistic', p.returnLogistic)
+  document.getElementById('fulfillMode').value = p.fulfillMode
+  toggleFulfill()
+  if (p.fulfillMode === 'fbo') { s('fboStorage', p.fboStorage); s('storageDays', p.storageDays); s('fboPick', p.fboPick); s('fboLastMile', p.fboLastMile) }
+  else if (p.fulfillMode === 'fbs') { s('fbsLogistic', p.fbsLogistic); s('fbsHandling', p.fbsHandling) }
+  document.getElementById('category').value = '0'
+}
+
+const loadPreset = key => {
+  const p = PRESETS[key]
+  if (!p) return
+  applyPresetData(p)
+  const b = document.getElementById('presetBanner')
+  b.style.display = 'flex'
+  document.getElementById('presetTitle').textContent = p.label
+  document.getElementById('presetDesc').textContent = p.desc
+  calculate()
+}
+
+// ── localStorage state ──
+const STATE_KEY = 'ozon_calc_state'
+
+const saveState = () => {
+  try {
+    const state = { tax: currentTax }
+    FIELD_IDS.forEach(id => {
+      const el = document.getElementById(id)
+      if (el) state[id] = el.value
+    })
+    const fm = document.getElementById('fulfillMode')
+    if (fm) state.fulfillMode = fm.value
+    localStorage.setItem(STATE_KEY, JSON.stringify(state))
+  } catch(e) {}
+}
+
+const loadState = () => {
+  try {
+    const raw = localStorage.getItem(STATE_KEY)
+    if (!raw) return false
+    const state = JSON.parse(raw)
+    if (state.tax) {
+      const tab = document.querySelector(`.tax-tab[data-tax="${state.tax}"]`)
+      if (tab) selectTax(tab)
+    }
+    FIELD_IDS.forEach(id => {
+      const el = document.getElementById(id)
+      if (el && state[id] !== undefined) el.value = state[id]
+    })
+    if (state.fulfillMode) {
+      document.getElementById('fulfillMode').value = state.fulfillMode
+      toggleFulfill()
+    }
+    return true
+  } catch(e) { return false }
+}
+
+const loadLastUsed = () => {
+  if (loadState()) {
+    document.getElementById('presetBanner').style.display = 'flex'
+    document.getElementById('presetTitle').textContent = '上次使用的参数'
+    document.getElementById('presetDesc').textContent = '已从本地存储恢复'
+    calculate()
+  }
+}
+
+// ── URL sharing ──
+const copyLink = () => {
+  try {
+    const params = new URLSearchParams()
+    params.set('tax', currentTax)
+    FIELD_IDS.forEach(id => {
+      const el = document.getElementById(id)
+      if (el) params.set(id, el.value)
+    })
+    const fm = document.getElementById('fulfillMode')
+    if (fm) params.set('fulfillMode', fm.value)
+    const url = location.href.split('?')[0] + '?' + params.toString()
+    navigator.clipboard.writeText(url).then(() => {
+      const btn = document.querySelector('.share-btn')
+      const orig = btn.textContent
+      btn.textContent = '✅ 已复制'
+      btn.style.borderColor = 'var(--green)'
+      btn.style.color = 'var(--green)'
+      setTimeout(() => { btn.textContent = orig; btn.style.borderColor = ''; btn.style.color = '' }, 2000)
+    })
+  } catch(e) { alert('复制失败，请手动复制地址栏链接') }
+}
+
+const loadFromUrl = () => {
+  try {
+    const params = new URLSearchParams(location.search)
+    if (!params.has('salePrice')) return false
+    const tax = params.get('tax')
+    if (tax) {
+      const tab = document.querySelector(`.tax-tab[data-tax="${tax}"]`)
+      if (tab) selectTax(tab)
+    }
+    FIELD_IDS.forEach(id => {
+      const v = params.get(id)
+      const el = document.getElementById(id)
+      if (el && v !== null) el.value = v
+    })
+    const fm = params.get('fulfillMode')
+    if (fm) { document.getElementById('fulfillMode').value = fm; toggleFulfill() }
+    return true
+  } catch(e) { return false }
+}
+
+// ── Tab switching ──
+const switchTab = tab => {
+  document.querySelectorAll('.rtab').forEach(t => t.classList.toggle('active', t.dataset.tab === tab))
+  document.querySelectorAll('.rp-content').forEach(p => p.style.display = p.dataset.panel === tab ? 'flex' : 'none')
+  if (tab === 'pricing') updatePricing()
+  if (tab === 'batch') { syncBatchUnitCost(); updateBatch() }
+}
+
+// ── Resizable P&L columns ──
+const PNL_COL_KEY = 'ozon_pnl_cols'
+
+const initResizableCols = () => {
+  const table = document.getElementById('pnlTable')
+  const ths = table.querySelectorAll('thead th')
+  // restore saved widths
+  try {
+    const saved = JSON.parse(localStorage.getItem(PNL_COL_KEY))
+    if (saved && saved.length === ths.length) {
+      ths.forEach((th, i) => { th.style.width = saved[i] + 'px' })
+    }
+  } catch(e) {}
+
+  // default widths if not set
+  if (!ths[0].style.width) {
+    const tw = table.offsetWidth
+    ths[0].style.width = Math.round(tw * 0.52) + 'px'
+    ths[1].style.width = Math.round(tw * 0.30) + 'px'
+    ths[2].style.width = Math.round(tw * 0.18) + 'px'
+  }
+
+  const handles = table.querySelectorAll('.col-resize')
+  handles.forEach(handle => {
+    handle.addEventListener('mousedown', e => {
+      e.preventDefault()
+      const colIdx = parseInt(handle.dataset.col)
+      const th = ths[colIdx]
+      const nextTh = ths[colIdx + 1]
+      const startX = e.clientX
+      const startW = th.offsetWidth
+      const nextStartW = nextTh.offsetWidth
+      handle.classList.add('dragging')
+
+      const onMove = ev => {
+        const dx = ev.clientX - startX
+        const newW = Math.max(60, startW + dx)
+        const newNextW = Math.max(40, nextStartW - dx)
+        th.style.width = newW + 'px'
+        nextTh.style.width = newNextW + 'px'
+      }
+      const onUp = () => {
+        handle.classList.remove('dragging')
+        document.removeEventListener('mousemove', onMove)
+        document.removeEventListener('mouseup', onUp)
+        // save
+        const widths = Array.from(ths).map(t => t.offsetWidth)
+        try { localStorage.setItem(PNL_COL_KEY, JSON.stringify(widths)) } catch(e) {}
+      }
+      document.addEventListener('mousemove', onMove)
+      document.addEventListener('mouseup', onUp)
+    })
+  })
+}
+
+// ── Init ──
+const init = () => {
+  // Show "last used" button if state exists
+  if (localStorage.getItem(STATE_KEY)) {
+    document.getElementById('lastUsedBtn').style.display = ''
+    try {
+      const s = JSON.parse(localStorage.getItem(STATE_KEY))
+      const desc = s.salePrice ? `${s.salePrice}₽ · ${s.commissionRate || '?'}%佣金` : '点击恢复'
+      document.getElementById('lastUsedDesc').textContent = desc
+    } catch(e) {}
+  }
+
+  // Priority: URL params > localStorage > defaults
+  if (!loadFromUrl()) {
+    loadState()
+  }
+
+  calculate()
+  initResizableCols()
+}
+
+init()
+</script>
+</body>
+</html>
