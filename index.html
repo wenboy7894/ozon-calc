@@ -311,6 +311,9 @@ select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='htt
       <div id="patentRow" style="display:none">
         <div class="field"><label>年专利费（卢布）</label><div class="iw"><input type="number" id="patentAnnual" value="60000" min="0" oninput="calculate()"><span class="unit">₽/年</span></div></div>
       </div>
+      <div id="osnoIncomeTaxRow">
+        <div class="field"><label>企业所得税率 <span class="hint">ОСНО默认25%</span></label><div class="iw"><input type="number" id="incomeTaxRate" class="hu" value="25" min="0" max="50" step="1" oninput="calculate()"><span class="unit">%</span></div></div>
+      </div>
     </div>
   </div>
 
@@ -598,6 +601,7 @@ const selectTax = el => {
   document.getElementById('ti-vat').textContent = c.vat
   document.getElementById('ti-entity').textContent = c.entity
   document.getElementById('patentRow').style.display = currentTax === 'patent' ? 'block' : 'none'
+  document.getElementById('osnoIncomeTaxRow').style.display = currentTax === 'osno' ? 'block' : 'none'
   document.getElementById('taxModeLabel').textContent = c.desc
   calculate()
 }
@@ -669,7 +673,7 @@ const calculate = () => {
     _vatPayable = Math.max(vatOut - vatIn, 0)
     const revEx = monthlyRevenue * (100/122)
     const expEx = vatInBase * (100/122) + monthlyAcquiring + otherCost
-    _incomeTax = Math.max(revEx - expEx, 0) * 0.25
+    _incomeTax = Math.max(revEx - expEx, 0) * (g('incomeTaxRate') / 100)
     monthlyTax = _vatPayable + _incomeTax
   } else if (currentTax === 'ausn8') {
     monthlyTax = monthlyRevenue * 0.08
@@ -864,7 +868,7 @@ const calcUnitNet = (P, override = {}) => {
     const vatInBase = cGoods + comm + log + retLog + aD
     vatP = Math.max(vatOut - vatInBase * 22/122, 0)
     const profBase = Math.max(rev * 100/122 - vatInBase * 100/122 - acq - oD, 0)
-    itP = profBase * 0.25
+    itP = profBase * (g('incomeTaxRate') / 100)
     tax = vatP + itP
   } else if (tx === 'usn6') {
     tax = rev * 0.06
@@ -1106,7 +1110,7 @@ const PRESETS = {
   electronics:{tax:'osno',salePrice:5000,goodsValue:2400,firstMile:400,commissionRate:9,monthlyQty:80,returnRate:4,returnDamageRate:15,fulfillMode:'fbs',fbsLogistic:120,fbsHandling:25,returnLogistic:70,acquiringRate:1.5,adCost:12000,otherCost:5000,label:'电子数码 — FBS高价案例',desc:'5000₽·佣金9%·FBS商家仓·月销80件'},
 }
 
-const FIELD_IDS = ['salePrice','goodsValue','firstMile','customsFee','commissionRate','monthlyQty','returnRate','returnDamageRate','acquiringRate','adCost','otherCost','returnLogistic','fboStorage','storageDays','fboPick','fboLastMile','fbsLogistic','fbsHandling','rfbsLogistic','patentAnnual','targetMargin','totalCapital','exchangeRate','unitCostRmb','testRatio']
+const FIELD_IDS = ['salePrice','goodsValue','firstMile','customsFee','commissionRate','monthlyQty','returnRate','returnDamageRate','acquiringRate','adCost','otherCost','returnLogistic','fboStorage','storageDays','fboPick','fboLastMile','fbsLogistic','fbsHandling','rfbsLogistic','patentAnnual','incomeTaxRate','targetMargin','totalCapital','exchangeRate','unitCostRmb','testRatio']
 
 const applyPresetData = p => {
   document.querySelectorAll('.tax-tab').forEach(t => t.classList.toggle('active', t.dataset.tax === p.tax))
