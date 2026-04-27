@@ -45,9 +45,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .pb.last-used{border-color:var(--orange);color:var(--orange);background:var(--orange-l)}
 #presetBanner{display:none;align-items:center;gap:8px;background:linear-gradient(90deg,#0a1f5c,#005bff);color:#fff;border-radius:6px;padding:5px 10px;font-size:11px;margin-left:auto}
 /* WORKSPACE */
-.ws{flex:1;display:grid;grid-template-columns:380px 1fr;min-height:0}
-.lp{border-right:1px solid var(--b1);background:var(--card);overflow-y:auto;max-height:calc(100vh - 120px);padding:8px 10px;display:flex;flex-direction:column;gap:6px}
-.rp{background:var(--bg);display:flex;flex-direction:column;overflow-y:auto;max-height:calc(100vh - 120px)}
+.ws{flex:1;display:grid;grid-template-columns:420px 1fr;min-height:0}
+.lp{border-right:1px solid var(--b1);background:var(--card);overflow-y:auto;overflow-x:hidden;padding:8px 10px;display:flex;flex-direction:column;gap:6px}
+.rp{background:var(--bg);display:flex;flex-direction:column;overflow-y:auto}
 /* CARDS */
 .card{background:var(--card);border:1px solid var(--b1);border-radius:var(--r);overflow:hidden}
 .ct{padding:5px 10px;font-size:11px;font-weight:700;color:var(--t2);border-bottom:1px solid var(--b2);display:flex;align-items:center;gap:5px;background:var(--bg)}
@@ -57,7 +57,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .fg{display:grid;grid-template-columns:1fr 1fr;gap:6px}
 .fg3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
 .field{display:flex;flex-direction:column;gap:2px}
-.field label{font-size:11px;font-weight:600;color:var(--t3);text-transform:uppercase;letter-spacing:.3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.field label{font-size:11px;font-weight:600;color:var(--t3);text-transform:uppercase;letter-spacing:.3px;white-space:normal;overflow:visible;word-break:break-all;line-height:1.4}
 .field .hint{font-size:10px;color:var(--t4);font-weight:400;text-transform:none;letter-spacing:0}
 .iw{position:relative}
 .iw .unit{position:absolute;right:7px;top:50%;transform:translateY(-50%);font-size:11px;color:var(--t4)}
@@ -68,8 +68,8 @@ select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='htt
 /* COLLAPSIBLE */
 .collapsible-hd{cursor:pointer;user-select:none}
 .collapsible-hd:hover{background:var(--blue-l)}
-.collapsible-body{display:none}
-.collapsible-body.open{display:flex;flex-direction:column;gap:5px}
+.collapsible-body{display:flex;flex-direction:column;gap:5px}
+.collapsible-body.closed{display:none}
 /* TAX TABS */
 .tax-tabs{display:flex;gap:3px;flex-wrap:wrap}
 .tax-tab{padding:3px 7px;border:1.5px solid var(--b1);border-radius:4px;background:var(--bg);cursor:pointer;font-size:10px;font-weight:600;color:var(--t3);transition:all .15s;line-height:1.3}
@@ -292,7 +292,7 @@ select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='htt
       <div class="ico" style="background:#e8f0ff">📋</div>
       税务制度
       <span style="margin-left:6px;font-size:10px;color:var(--blue);font-weight:400" id="taxModeLabel">ОСНО</span>
-      <span id="taxArrow" style="margin-left:auto;font-size:10px;color:var(--t4)">▶</span>
+      <span id="taxArrow" style="margin-left:auto;font-size:10px;color:var(--t4)">▼</span>
     </div>
     <div class="collapsible-body cb" id="taxBody">
       <div class="tax-tabs" id="taxTabs">
@@ -320,7 +320,7 @@ select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='htt
       <div class="ico" style="background:#fff3eb">⚙️</div>
       高级设置
       <span style="margin-left:6px;font-size:10px;color:var(--t4);font-weight:400">退货率、仓储、广告等</span>
-      <span id="advArrow" style="margin-left:auto;font-size:10px;color:var(--t4)">▶</span>
+      <span id="advArrow" style="margin-left:auto;font-size:10px;color:var(--t4)">▼</span>
     </div>
     <div class="collapsible-body cb" id="advBody">
       <div class="sdiv">退货设置</div>
@@ -583,9 +583,9 @@ const g = id => parseFloat(document.getElementById(id).value) || 0
 const toggleSection = (bodyId, arrowId) => {
   const body = document.getElementById(bodyId)
   const arrow = document.getElementById(arrowId)
-  const isOpen = body.classList.contains('open')
-  body.classList.toggle('open', !isOpen)
-  if (arrow) arrow.textContent = isOpen ? '▶' : '▼'
+  const isClosed = body.classList.contains('closed')
+  body.classList.toggle('closed', !isClosed)
+  if (arrow) arrow.textContent = isClosed ? '▼' : '▶'
 }
 
 // ── Tax selection ──
