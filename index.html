@@ -247,6 +247,29 @@ select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='htt
           <label>清关费用（₽/件）<span class="hint">海关关税+清关服务费</span></label>
           <div class="iw"><input type="number" id="customsFee" class="hu" value="0" min="0" oninput="calculate()"><span class="unit">₽</span></div>
         </div>
+        <div style="margin-top:2px">
+          <div style="font-size:10px;font-weight:700;color:var(--t3);cursor:pointer;display:flex;align-items:center;gap:4px" onclick="document.getElementById('dutyRef').style.display=document.getElementById('dutyRef').style.display==='none'?'block':'none';this.querySelector('span').textContent=document.getElementById('dutyRef').style.display==='none'?'▶':'▼'">
+            <span>▶</span> 📋 EAEU关税参考表（白关·正规清关）
+          </div>
+          <div id="dutyRef" style="display:none;margin-top:4px">
+            <table style="width:100%;border-collapse:collapse;font-size:10px">
+              <thead>
+                <tr style="background:var(--bg)">
+                  <th style="padding:3px 6px;text-align:left;border-bottom:1px solid var(--b1);font-weight:600;color:var(--t3)">品类</th>
+                  <th style="padding:3px 6px;text-align:center;border-bottom:1px solid var(--b1);font-weight:600;color:var(--t3)">HS编码</th>
+                  <th style="padding:3px 6px;text-align:center;border-bottom:1px solid var(--b1);font-weight:600;color:var(--t3)">关税率</th>
+                  <th style="padding:3px 6px;text-align:center;border-bottom:1px solid var(--b1);font-weight:600;color:var(--t3)">试算</th>
+                </tr>
+              </thead>
+              <tbody id="dutyTableBody"></tbody>
+            </table>
+            <div style="margin-top:6px;background:var(--blue-l);border-radius:5px;padding:6px 8px;font-size:10px;color:var(--blue);line-height:1.6">
+              <strong>白关清关费构成：</strong>关税 + 进口НДС(22%) + 清关服务费(约50~150₽/件)<br>
+              <strong>公式：</strong>清关费/件 = 货值×关税率 + (货值+关税)×22% + 清关服务费<br>
+              <strong>注意：</strong>进口НДС可作为ОСНО进项抵扣，实际税负会降低
+            </div>
+          </div>
+        </div>
         <div class="field">
           <label>商品类目</label>
           <select id="category" onchange="updateCommission()">
@@ -823,6 +846,9 @@ const calculate = () => {
   // Sync active tabs
   if (document.querySelector('.rtab[data-tab="pricing"]')?.classList.contains('active')) updatePricing()
   if (document.querySelector('.rtab[data-tab="batch"]')?.classList.contains('active')) { syncBatchUnitCost(); updateBatch() }
+
+  // Update duty reference table
+  buildDutyTable()
 }
 
 // ── Sensitivity Analysis ──
@@ -1344,6 +1370,51 @@ const calcIncomeTaxBox = () => {
   document.getElementById('itCalcTax').textContent = fmtI(tax)
   document.getElementById('itCalcAfter').textContent = fmtI(after)
   document.getElementById('itCalcEffective').textContent = effective.toFixed(1) + '%'
+}
+
+// ── Duty reference table ──
+const DUTY_DATA = [
+  { cat: '电子配件（手机壳/数据线）', hs: '8544/3926', rate: 5 },
+  { cat: '消费电子（耳机/充电器）', hs: '8518/8504', rate: 7.5 },
+  { cat: '平板/笔记本电脑', hs: '8471', rate: 0 },
+  { cat: '手机及零件', hs: '8517', rate: 0 },
+  { cat: '家居收纳/塑料制品', hs: '3924/3926', rate: 6.5 },
+  { cat: '家具/灯具', hs: '9403/9405', rate: 8 },
+  { cat: '厨房用品（不锈钢）', hs: '7323', rate: 12 },
+  { cat: '纺织品/床上用品', hs: '6302/6304', rate: 10 },
+  { cat: '服装（针织）', hs: '6109/6110', rate: 12 },
+  { cat: '服装（梭织）', hs: '6204/6205', rate: 10 },
+  { cat: '鞋类', hs: '6402/6403', rate: 10 },
+  { cat: '箱包', hs: '4202', rate: 10 },
+  { cat: '玩具', hs: '9503', rate: 10 },
+  { cat: '美妆/护肤品', hs: '3304', rate: 6.5 },
+  { cat: '汽车配件', hs: '8708', rate: 5 },
+  { cat: '宠物用品', hs: '3926/7326', rate: 6.5 },
+  { cat: '食品/保健品', hs: '2106', rate: 10 },
+]
+
+const buildDutyTable = () => {
+  const gv = g('goodsValue')
+  const tbody = document.getElementById('dutyTableBody')
+  tbody.innerHTML = DUTY_DATA.map(d => {
+    const duty = gv * d.rate / 100
+    const importVat = (gv + duty) * 0.22
+    const serviceFee = 100
+    const total = Math.round(duty + importVat + serviceFee)
+    return `<tr style="border-bottom:1px solid var(--b2)">
+      <td style="padding:3px 6px;color:var(--t2)">${d.cat}</td>
+      <td style="padding:3px 6px;text-align:center;color:var(--t4)">${d.hs}</td>
+      <td style="padding:3px 6px;text-align:center;font-weight:700;color:var(--orange)">${d.rate}%</td>
+      <td style="padding:3px 6px;text-align:center">
+        <span style="cursor:pointer;color:var(--blue);font-weight:600;text-decoration:underline" onclick="applyDuty(${total})" title="关税${fmtI(duty)}+进口НДС${fmtI(importVat)}+服务费${serviceFee}=总${total}₽，点击填入">${fmtI(total)} ₽ ←</span>
+      </td>
+    </tr>`
+  }).join('')
+}
+
+const applyDuty = val => {
+  document.getElementById('customsFee').value = val
+  calculate()
 }
 
 const init = () => {
