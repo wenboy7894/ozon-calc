@@ -440,6 +440,31 @@ select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='htt
 
     <!-- Breakeven -->
     <div class="card">
+      <div class="ct"><div class="ico" style="background:#fff3eb">🧮</div>企业所得税独立计算器<span style="margin-left:auto;font-size:10px;color:var(--t4)">可手动填写</span></div>
+      <div class="cb">
+        <div class="fg">
+          <div class="field">
+            <label>应税利润（₽）<span class="hint">不含税收入−不含税支出</span></label>
+            <div class="iw"><input type="number" id="itCalcBase" class="hu" value="0" min="0" oninput="calcIncomeTaxBox()"><span class="unit">₽</span></div>
+          </div>
+          <div class="field">
+            <label>所得税率<span class="hint">ОСНО默认25%</span></label>
+            <div class="iw"><input type="number" id="itCalcRate" class="hu" value="25" min="0" max="50" step="1" oninput="calcIncomeTaxBox()"><span class="unit">%</span></div>
+          </div>
+        </div>
+        <div style="margin-top:6px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px">
+          <div class="mg-item"><div class="ml">应缴所得税</div><div class="mv" id="itCalcTax" style="color:var(--orange)">0</div><div class="mu">卢布</div></div>
+          <div class="mg-item"><div class="ml">税后利润</div><div class="mv" id="itCalcAfter" style="color:var(--green)">0</div><div class="mu">卢布</div></div>
+          <div class="mg-item"><div class="ml">实际税负率</div><div class="mv" id="itCalcEffective">0%</div><div class="mu">占应税利润</div></div>
+        </div>
+        <div style="margin-top:6px;font-size:10px;color:var(--t4);line-height:1.6">
+          💡 上方自动计算的应税利润已同步填入。你也可以手动修改，用于独立验算或对比不同场景。
+        </div>
+      </div>
+    </div>
+
+    <!-- Breakeven -->
+    <div class="card">
       <div class="ct"><div class="ico" style="background:#e8f0ff">⚖️</div>盈亏平衡分析</div>
       <div class="cb">
         <div class="be-row">
@@ -765,6 +790,17 @@ const calculate = () => {
       <td class="pct" style="color:${perNetProfit>=0?'var(--green)':'var(--red)'};font-weight:700;text-align:center">${margin.toFixed(1)}%</td>
     </tr>`
   document.getElementById('pnl-tax-mode').textContent = TAX_CONFIG[currentTax].desc
+
+  // Sync income tax calculator
+  if (currentTax === 'osno') {
+    const revEx = monthlyRevenue * (100/122)
+    const vatInBase = monthlyCostGoods + monthlyComm + monthlyLogistic + monthlyReturnLogistic + adCost
+    const expEx = vatInBase * (100/122) + monthlyAcquiring + otherCost
+    const taxableProfit = Math.max(revEx - expEx, 0)
+    document.getElementById('itCalcBase').value = Math.round(taxableProfit)
+    document.getElementById('itCalcRate').value = document.getElementById('incomeTaxRate').value
+    calcIncomeTaxBox()
+  }
 
   // Breakeven
   const perRL = pu(monthlyReturnLogistic)
@@ -1298,6 +1334,18 @@ const initResizableCols = () => {
 }
 
 // ── Init ──
+// ── Income Tax standalone calculator ──
+const calcIncomeTaxBox = () => {
+  const base = parseFloat(document.getElementById('itCalcBase').value) || 0
+  const rate = (parseFloat(document.getElementById('itCalcRate').value) || 25) / 100
+  const tax = Math.max(base, 0) * rate
+  const after = base - tax
+  const effective = base > 0 ? (tax / base * 100) : 0
+  document.getElementById('itCalcTax').textContent = fmtI(tax)
+  document.getElementById('itCalcAfter').textContent = fmtI(after)
+  document.getElementById('itCalcEffective').textContent = effective.toFixed(1) + '%'
+}
+
 const init = () => {
   // Show "last used" button if state exists
   if (localStorage.getItem(STATE_KEY)) {
